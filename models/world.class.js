@@ -14,13 +14,13 @@ class World {
     }
 
     draw() {
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, 100, 100); // Charakter zeichnen
+        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height); // Charakter zeichnen
         
 
 
         // // Alle Feinde zeichnen
-        // this.enemies.forEach(enemy => {
-        //     this.ctx.drawImage(enemy.img, enemy.x, enemy.y);
-        // });
+        this.enemies.forEach(enemy => {
+            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+        });
     }
 }
