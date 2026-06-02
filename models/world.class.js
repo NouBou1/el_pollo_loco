@@ -7,6 +7,18 @@ class World {
         new Chicken()
     ];
     canvas;
+    clouds = [
+        new Cloud(),
+        new Cloud(),
+    ];
+    backgroundObjects = [
+
+
+        new BackgroundObject('img/5_background/layers/air.png', 0, 0),
+        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 0, 0),
+        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 0, 0),
+        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 0, 0)
+    ];
     ctx;
 
     constructor(canvas) {
@@ -18,16 +30,22 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height); // Canvas löschen
 
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height); // Charakter zeichnen
-        this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height); // Feinde zeichnen
-        });
+        this.addObjectsToMap(this.backgroundObjects); // Hintergrundobjekte zeichnen
+        this.addObjectsToMap(this.clouds); // Wolken zeichnen
+        this.addObjectsToMap([this.character]); // Charakter zeichnen
+        this.addObjectsToMap(this.enemies); // Feinde zeichnen
+
 
         requestAnimationFrame(() => this.draw()); // Animation fortsetzen
+    }
 
-        // // Alle Feinde zeichnen
-        this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+    addObjectsToMap(objects) {
+        objects.forEach(object => {
+            this.addToMap(object);
         });
+    }
+
+    addToMap(movableObject) {
+        this.ctx.drawImage(movableObject.img, movableObject.x, movableObject.y, movableObject.width, movableObject.height);
     }
 }
