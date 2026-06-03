@@ -1,12 +1,12 @@
 let canvas; 
 let world ;
-keyboard = new Keyboard();
+let keyboard = new Keyboard();
 
 
 function init() {
  
     canvas = document.getElementById("game-canvas");
-       world = new World(canvas);
+       world = new World(canvas, keyboard);
     
 
     console.log("my character is", world.character);
@@ -15,36 +15,41 @@ function init() {
 
 
 window.addEventListener("keydown", (e) => {
-    console.log("Key pressed: ", e.code);
-    if (e.code === "Space") {   
+    console.log("Key pressed: ", e.keyCode);
+    if (e.keyCode === 32) {   
         world.character.jump();
     }
-    if (e.code === "ArrowRight") {
-        world.character.moveRight();
+    if (e.keyCode === 39) {
+        keyboard.RIGHT = true;
     }
-    if (e.code === "ArrowLeft") {
-        world.character.moveLeft();
+    if (e.keyCode === 37) {
+        keyboard.LEFT = true;
     }
-    if (e.code === "ArrowUp") {
-        world.character.jump();
+    if (e.keyCode === 38) {
+        keyboard.UP = true;
     }
-    if (e.code === "ArrowDown") {
-        world.character.y += 10;
+    if (e.keyCode === 40) {
+        keyboard.DOWN = true;
     }
+
 });
 
 
 window.addEventListener("keyup", (e) => {
-    console.log("Key released: ", e.code); 
-    if (e.code === "ArrowRight") {
-        world.character.stopMove();
+    console.log("Key released: ", e.code);
+    if (e.keyCode === 39) {
+        keyboard.RIGHT = false;
     }
-    if (e.code === "ArrowLeft") {
-        world.character.stopMove();
+    if (e.keyCode === 37) {
+        keyboard.LEFT = false;
     }
-    if (e.code === "ArrowUp") {
-        world.character.stopJump();
+    if (e.keyCode === 38) {
+        keyboard.UP = false;
     }
-
-
-}   );
+    if (e.keyCode === 40) {
+        keyboard.DOWN = false;
+    }
+    if (e.keyCode === 32) {
+        keyboard.SPACE = false;
+    }
+});

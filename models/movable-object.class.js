@@ -20,10 +20,6 @@ class MovableObject {
         });
     }
 
-    moveRight() {
-        this.x += 10;
-        console.log(`Moved right to x: ${this.x}`);
-    }
 
     moveLeft() {
         setInterval(() => {

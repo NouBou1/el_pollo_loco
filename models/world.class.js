@@ -12,31 +12,41 @@ class World {
         new Cloud(),
     ];
     backgroundObjects = [
-
-
         new BackgroundObject('img/5_background/layers/air.png', 0, 0),
         new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0, 0),
         new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0, 0),
         new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0, 0)
     ];
     ctx;
+    keyboard;
+    world;
 
-    constructor(canvas) {
+    constructor(canvas , keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
+        this.keyboard = keyboard;
+        this.character.world = this;
         this.draw();
+        this.setWorld();
+
     }
 
+    setWorld() {
+     this.character.world = this;
+    }
+
+
+
     draw() {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height); 
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-        this.addObjectsToMap(this.backgroundObjects); 
-        this.addObjectsToMap(this.clouds); 
-        this.addObjectsToMap([this.character]); 
-        this.addObjectsToMap(this.enemies); 
+        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap([this.character]);
+        this.addObjectsToMap(this.enemies);
 
 
-        requestAnimationFrame(() => this.draw()); 
+        requestAnimationFrame(() => this.draw());
     }
 
     addObjectsToMap(objects) {
