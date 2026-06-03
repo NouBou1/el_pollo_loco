@@ -1,6 +1,6 @@
 class World {
 
-    character = new Character(); // Erstellen einer Instanz der Character-Klasse
+    character = new Character();
     enemies = [
         new Chicken(),
         new Chicken(),
@@ -28,15 +28,15 @@ class World {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height); // Canvas löschen
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height); 
 
-        this.addObjectsToMap(this.backgroundObjects); // Hintergrundobjekte zeichnen
-        this.addObjectsToMap(this.clouds); // Wolken zeichnen
-        this.addObjectsToMap([this.character]); // Charakter zeichnen
-        this.addObjectsToMap(this.enemies); // Feinde zeichnen
+        this.addObjectsToMap(this.backgroundObjects); 
+        this.addObjectsToMap(this.clouds); 
+        this.addObjectsToMap([this.character]); 
+        this.addObjectsToMap(this.enemies); 
 
 
-        requestAnimationFrame(() => this.draw()); // Animation fortsetzen
+        requestAnimationFrame(() => this.draw()); 
     }
 
     addObjectsToMap(objects) {

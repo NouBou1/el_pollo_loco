@@ -5,7 +5,7 @@ class MovableObject {
     width = 100;
     img;
     imageCache = [];
-    speed = 0.15; // Standardgeschwindigkeit für bewegliche Objekte
+    speed = 0.15; 
 
     loadImage(path) {
         this.img = new Image();
@@ -27,7 +27,17 @@ class MovableObject {
 
     moveLeft() {
         setInterval(() => {
-            this.x -= this.speed; // Wolke bewegt sich nach links
+            this.x -= this.speed; 
         }, 1000 / 60);
+    }
+
+    stopJump() {
+        this.y = 300; 
+        console.log("Character stops jumping");
+    }
+
+    stopMove() {
+        this.speed = 0;
+        console.log("Character stops moving");
     }
 }

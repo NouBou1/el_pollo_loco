@@ -1,6 +1,6 @@
 class Character extends MovableObject {
-x = 50; // Startposition x
-y = 280; // Startposition y
+x = 50;
+y = 280; 
 IMAGES_WALKING = [
     'img/2_character_pepe/2_walk/W-21.png',
     'img/2_character_pepe/2_walk/W-22.png',
@@ -21,7 +21,7 @@ animate() {
         this.img = this.imageCache[path];
         this.currentImageIndex++;
         
-        // Index zurücksetzen wenn am Ende des Arrays
+      
         if (this.currentImageIndex >= this.IMAGES_WALKING.length) {
             this.currentImageIndex = 0;
         }
@@ -31,7 +31,7 @@ animate() {
 
 jump() {
 
-    this.y -= 150; // Charakter springt nach oben
+    this.y -= 150; 
     console.log("Character jumps");
 }
 }

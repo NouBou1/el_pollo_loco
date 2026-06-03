@@ -1,12 +1,12 @@
 class Cloud extends MovableObject {
-    y = 20; // Feste y-Position für alle Wolken
+    y = 20;
     height = 250;
     width = 400;
-    speed = 0.2; // Geschwindigkeit der Wolken
+    speed = 0.2; 
 
 constructor() {
     super().loadImage('img/5_background/layers/4_clouds/1.png');
-    this.x = Math.random() * 700; // Zufällige x-Position zwischen 0 und 700
+    this.x = Math.random() * 700;
     this.animate();
 
 }

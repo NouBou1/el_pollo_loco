@@ -1,4 +1,4 @@
-let canvas;
+let canvas; 
 let world ;
 keyboard = new Keyboard();
 
@@ -34,3 +34,17 @@ window.addEventListener("keydown", (e) => {
 });
 
 
+window.addEventListener("keyup", (e) => {
+    console.log("Key released: ", e.code); 
+    if (e.code === "ArrowRight") {
+        world.character.stopMove();
+    }
+    if (e.code === "ArrowLeft") {
+        world.character.stopMove();
+    }
+    if (e.code === "ArrowUp") {
+        world.character.stopJump();
+    }
+
+
+}   );
