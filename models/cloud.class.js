@@ -2,6 +2,7 @@ class Cloud extends MovableObject {
     y = 20; // Feste y-Position für alle Wolken
     height = 250;
     width = 400;
+    speed = 0.2; // Geschwindigkeit der Wolken
 
 constructor() {
     super().loadImage('img/5_background/layers/4_clouds/1.png');
@@ -11,9 +12,7 @@ constructor() {
 }
 
 animate() {
-    setInterval(() => {
-        this.x -= 0.2; // Wolke bewegt sich nach links
-    }, 1000 / 60);
+    this.moveLeft();
 
 }
 }

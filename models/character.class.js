@@ -27,7 +27,11 @@ animate() {
         }
     }, 100);
 }
+
+
 jump() {
+
+    this.y -= 150; // Charakter springt nach oben
     console.log("Character jumps");
 }
 }
