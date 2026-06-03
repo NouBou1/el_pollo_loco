@@ -1,13 +1,33 @@
 class Character extends MovableObject {
+x = 50; // Startposition x
+y = 280; // Startposition y
+IMAGES_WALKING = [
+    'img/2_character_pepe/2_walk/W-21.png',
+    'img/2_character_pepe/2_walk/W-22.png',
+    'img/2_character_pepe/2_walk/W-23.png',
+    'img/2_character_pepe/2_walk/W-24.png'
+];
+currentImageIndex = 0;
 
+constructor() {
+    super().loadImage('img/2_character_pepe/2_walk/W-21.png');
+    this.loadImages(this.IMAGES_WALKING);
+    this.animate();
+}
 
-    constructor() {
-        super().loadImage('img/2_character_pepe/2_walk/W-21.png');
-        this.x = 50; // Startposition x
-        this.y = 280; // Startposition y
-    }
-
-    jump() {
-        console.log("Character jumps");
-    }
+animate() {
+    setInterval(() => {
+        let path = this.IMAGES_WALKING[this.currentImageIndex];
+        this.img = this.imageCache[path];
+        this.currentImageIndex++;
+        
+        // Index zurücksetzen wenn am Ende des Arrays
+        if (this.currentImageIndex >= this.IMAGES_WALKING.length) {
+            this.currentImageIndex = 0;
+        }
+    }, 100);
+}
+jump() {
+    console.log("Character jumps");
+}
 }
