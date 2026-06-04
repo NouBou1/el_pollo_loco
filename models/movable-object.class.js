@@ -5,7 +5,8 @@ class MovableObject {
     width = 100;
     img;
     imageCache = [];
-    speed = 0.15; 
+    speed = 0.15;
+    currentImageIndex = 0;
 
     loadImage(path) {
         this.img = new Image();
@@ -23,12 +24,12 @@ class MovableObject {
 
     moveLeft() {
         setInterval(() => {
-            this.x -= this.speed; 
+            this.x -= this.speed;
         }, 1000 / 60);
     }
 
     stopJump() {
-        this.y = 300; 
+        this.y = 300;
         console.log("Character stops jumping");
     }
 
@@ -36,4 +37,25 @@ class MovableObject {
         this.speed = 0;
         console.log("Character stops moving");
     }
+
+    playAnimation(images) {
+        let i = this.currentImageIndex % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImageIndex++;
+    }
+
+    isAboveGround() {
+        return this.y < 280;
+    }
+
+    applyGravity() {
+        setInterval(() => {
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
+        }, 1000 / 25);
+    }
+
 }
