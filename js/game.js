@@ -18,6 +18,7 @@ window.addEventListener("keydown", (e) => {
     console.log("Key pressed: ", e.keyCode);
     if (e.keyCode === 32) {   
         world.character.jump();
+        keyboard.SPACE = true;
     }
     if (e.keyCode === 39) {
         keyboard.RIGHT = true;

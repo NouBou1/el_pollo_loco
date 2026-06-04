@@ -1,7 +1,9 @@
 class Character extends MovableObject {
-    x = 50;
-    y = 280;
-    speed = 1.5;
+    x = 100;
+    y = 180;
+    height = 250;
+    width = 100;
+    speed = 3.5;
     IMAGES_WALKING = [
        
         'img/2_character_pepe/2_walk/W-21.png',
@@ -25,6 +27,8 @@ class Character extends MovableObject {
     speedY = 0;
     acceleration = 2.5;
     isJumping = false;
+    otherDirection = false;
+    
 
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
@@ -37,17 +41,24 @@ class Character extends MovableObject {
     animate() {
 
         setInterval(() => {
-            if (this.world.keyboard.RIGHT) { 
+            if (this.world.keyboard.RIGHT && this.x + this.speed < this.world.level.levelEndX - this.width) { 
                 this.x += this.speed;
+                this.otherDirection = false;
+                this.world.camera_x = -this.x + 100;
                 console.log(`Moved right to x: ${this.x}`);
+                console.log(`World level end X: ${this.world.level.levelEndX}`);
             }
-            if (this.world.keyboard.LEFT) {
+            if (this.world.keyboard.LEFT && this.x > 110  ) {
                 this.x -= this.speed;
+                this.otherDirection = true;
+                this.world.camera_x = -this.x + 100;
                 console.log(`Moved left to x: ${this.x}`);
             }
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
             }
+  
+         
         }, 1000 / 60);
 
         setInterval(() => {

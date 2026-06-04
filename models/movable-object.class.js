@@ -21,7 +21,6 @@ class MovableObject {
         });
     }
 
-
     moveLeft() {
         setInterval(() => {
             this.x -= this.speed;
@@ -29,7 +28,7 @@ class MovableObject {
     }
 
     stopJump() {
-        this.y = 300;
+        this.y = 180;
         console.log("Character stops jumping");
     }
 
@@ -39,14 +38,14 @@ class MovableObject {
     }
 
     playAnimation(images) {
-        let i = this.currentImageIndex % images.length;
+        let i = this.currentImageIndex % this.IMAGES_WALKING.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImageIndex++;
     }
 
     isAboveGround() {
-        return this.y < 280;
+        return this.y < 180;
     }
 
     applyGravity() {
