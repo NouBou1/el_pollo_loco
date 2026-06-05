@@ -13,6 +13,5 @@ constructor() {
 
 animate() {
     this.moveLeft();
-
 }
 }

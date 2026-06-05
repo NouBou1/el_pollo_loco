@@ -10,6 +10,7 @@ class World {
     world;
     camera_x = 0;
     level = level1;
+    hit = false;
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
@@ -36,14 +37,24 @@ class World {
         this.repeatBackground();
         this.draw();
         this.setWorld();
-
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-
+    checkCollisions() {
+        setInterval(() => {
+            this.enemies.forEach(enemy => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.energy -= 10;
+                    this.hit = true;
+                  
+                }
+            });
+        }, 100);
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -53,6 +64,7 @@ class World {
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);
+
         this.ctx.translate(-this.camera_x, 0);
 
         requestAnimationFrame(() => this.draw());
@@ -71,9 +83,14 @@ class World {
             this.ctx.scale(-1, 1);
             this.ctx.translate(-movableObject.x - movableObject.width / 2, 0);
         }
-        this.ctx.drawImage(movableObject.img, movableObject.x, movableObject.y, movableObject.width, movableObject.height);
+        movableObject.draw(this.ctx);
+        movableObject.drawCollisionFrame(this.ctx);
+
         if (movableObject.otherDirection) {
             this.ctx.restore();
         }
     }
+
+
+
 }

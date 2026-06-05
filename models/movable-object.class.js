@@ -7,6 +7,8 @@ class MovableObject {
     imageCache = [];
     speed = 0.15;
     currentImageIndex = 0;
+    energy = 100;
+
 
     loadImage(path) {
         this.img = new Image();
@@ -21,6 +23,27 @@ class MovableObject {
         });
     }
 
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawCollisionFrame(ctx) {
+        if (this instanceof Character || this instanceof Chicken) {
+            ctx.beginPath();
+            ctx.lineWidth = '5';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
+    }
+
+    isColliding(mo) {
+        return this.x + this.width > mo.x &&
+            this.x < mo.x + mo.width &&
+            this.y + this.height > mo.y &&
+            this.y < mo.y + mo.height;
+    }
+    
     moveLeft() {
         setInterval(() => {
             this.x -= this.speed;
@@ -29,12 +52,10 @@ class MovableObject {
 
     stopJump() {
         this.y = 180;
-        console.log("Character stops jumping");
     }
 
     stopMove() {
         this.speed = 0;
-        console.log("Character stops moving");
     }
 
     playAnimation(images) {
@@ -54,7 +75,20 @@ class MovableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
+            if (this.y > 180) {
+                this.y = 180;
+                this.speedY = 0;
+            }
         }, 1000 / 25);
     }
 
+    hitCharacter() {
+        this.character.energy -= 5;
+        if (this.character.energy < 0) {
+            this.character.energy = 0;
+        }
+        if (this.hit) {
+            this.hit = false;
+        }
+    }
 }

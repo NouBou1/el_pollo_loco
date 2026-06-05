@@ -9,15 +9,13 @@ function init() {
        world = new World(canvas, keyboard);
     
 
-    console.log("my character is", world.character);
+    
 
 }
 
 
 window.addEventListener("keydown", (e) => {
-    console.log("Key pressed: ", e.keyCode);
     if (e.keyCode === 32) {   
-        world.character.jump();
         keyboard.SPACE = true;
     }
     if (e.keyCode === 39) {
@@ -27,7 +25,7 @@ window.addEventListener("keydown", (e) => {
         keyboard.LEFT = true;
     }
     if (e.keyCode === 38) {
-        keyboard.UP = true;
+        keyboard.SPACE = true;
     }
     if (e.keyCode === 40) {
         keyboard.DOWN = true;
@@ -37,7 +35,6 @@ window.addEventListener("keydown", (e) => {
 
 
 window.addEventListener("keyup", (e) => {
-    console.log("Key released: ", e.code);
     if (e.keyCode === 39) {
         keyboard.RIGHT = false;
     }
