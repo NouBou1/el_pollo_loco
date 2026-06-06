@@ -5,6 +5,7 @@ class World {
     enemies = level1.enemies;
     clouds = level1.clouds;
     backgroundObjects = level1.backgroundObjects;
+    statusbar = [new Statusbar()];
     ctx;
     keyboard;
     world;
@@ -48,9 +49,11 @@ class World {
         setInterval(() => {
             this.enemies.forEach(enemy => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.energy -= 10;
+                    this.character.hit();
                     this.hit = true;
-                  
+                    setTimeout(() => {
+                        this.hit = false;
+                    }, 500);
                 }
             });
         }, 100);
@@ -61,6 +64,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.statusbar);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);

@@ -1,4 +1,4 @@
-class MovableObject {
+class MovableObject extends DrawableObject {
     x = 60;
     y = 300;
     height = 150;
@@ -8,34 +8,10 @@ class MovableObject {
     speed = 0.15;
     currentImageIndex = 0;
     energy = 100;
+    lastHit = 0;
 
 
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
 
-    loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    drawCollisionFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
@@ -43,7 +19,7 @@ class MovableObject {
             this.y + this.height > mo.y &&
             this.y < mo.y + mo.height;
     }
-    
+
     moveLeft() {
         setInterval(() => {
             this.x -= this.speed;
@@ -82,13 +58,21 @@ class MovableObject {
         }, 1000 / 25);
     }
 
-    hitCharacter() {
-        this.character.energy -= 5;
-        if (this.character.energy < 0) {
-            this.character.energy = 0;
+    isHit() {
+        let timepassed = new Date().getTime() - this.lastHit;
+        return timepassed < 1000;
+    }
+    hit() {
+        this.energy -= 2;
+        if (this.energy < 0) {
+            this.energy = 0;
         }
-        if (this.hit) {
-            this.hit = false;
-        }
+        this.lastHit = new Date().getTime();
+    }
+
+    isDead() {
+        return this.energy == 0;
     }
 }
+
+
