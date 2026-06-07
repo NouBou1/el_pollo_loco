@@ -5,7 +5,6 @@ class Character extends MovableObject {
     width = 100;
     speed = 3.5;
     IMAGES_WALKING = [
-
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
         'img/2_character_pepe/2_walk/W-23.png',
@@ -36,13 +35,14 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-55.png',
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png',
-    ];  
+    ];
     currentImageIndex = 0;
     world;
     speedY = 0;
     acceleration = 2.5;
     isJumping = false;
     otherDirection = false;
+    lastThrow = 0;
 
 
 
@@ -79,8 +79,14 @@ class Character extends MovableObject {
             if (!this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.isJumping = false;
             }
+            if (this.world.keyboard.D) {
+                let currentTime = Date.now();
+                if (currentTime - this.lastThrow > 1000) {
+                    this.throw();
+                    this.lastThrow = currentTime;
 
-
+                }
+            }
 
         }, 1000 / 60);
 
@@ -93,7 +99,9 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
-            } else {
+            }
+
+            else {
                 this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
             }
         }, 100);
@@ -107,5 +115,14 @@ class Character extends MovableObject {
         this.isJumping = true;
 
     }
+
+
+    throw() {
+        let bottle = new ThrowableObject(this.x + 50, this.y + 100);
+        this.world.throwableObjects.push(bottle);
+    }
+
+
+
 
 }

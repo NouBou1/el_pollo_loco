@@ -6,12 +6,14 @@ class World {
     clouds = level1.clouds;
     backgroundObjects = level1.backgroundObjects;
     statusbar = [new Statusbar()];
+    throwableObjects = [];
     ctx;
     keyboard;
     world;
     camera_x = 0;
     level = level1;
     hit = false;
+    throwableObject = [new ThrowableObject()];
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
@@ -75,6 +77,7 @@ class World {
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);
+        this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
 
