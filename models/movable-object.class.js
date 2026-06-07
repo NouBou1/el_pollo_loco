@@ -42,7 +42,11 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
+        if (this instanceof ThrowableObject) {
+            return true;
+        } else {
         return this.y < 180;
+        }
     }
 
     applyGravity() {
@@ -51,7 +55,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-            if (this.y > 180) {
+            if (!(this instanceof ThrowableObject) && this.y > 180) {   
                 this.y = 180;
                 this.speedY = 0;
             }

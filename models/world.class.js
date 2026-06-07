@@ -5,6 +5,8 @@ class World {
     enemies = level1.enemies;
     clouds = level1.clouds;
     backgroundObjects = level1.backgroundObjects;
+    bottles = level1.bottles;
+    coins = level1.coins;
     statusbar = [new Statusbar()];
     throwableObjects = [];
     ctx;
@@ -13,7 +15,6 @@ class World {
     camera_x = 0;
     level = level1;
     hit = false;
-    throwableObject = [new ThrowableObject()];
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
@@ -66,22 +67,20 @@ class World {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
-
         this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap(this.bottles);
+        this.addObjectsToMap(this.coins);
+        this.addObjectsToMap([this.character]);
+        this.addObjectsToMap(this.enemies);
+        this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
         // ------ space for fixed objects like statusbar ------
         this.addObjectsToMap(this.statusbar);
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.clouds);
-        this.addObjectsToMap([this.character]);
-        this.addObjectsToMap(this.enemies);
-        this.addObjectsToMap(this.throwableObjects);
-
         this.ctx.translate(-this.camera_x, 0);
-
-
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -91,6 +90,10 @@ class World {
 
 
     addObjectsToMap(objects) {
+        if (!objects) {
+            console.error('Array is undefined!');
+            return;
+        }
         objects.forEach(object => {
             this.addToMap(object);
         });

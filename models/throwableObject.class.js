@@ -1,8 +1,8 @@
 class ThrowableObject extends MovableObject {
-    speedY = 10;
-    acceleration = 0.5;
+    speedY = 0;
+    acceleration = 4;
     x = 120;
-    y = 100;
+    y = 190;
     height = 50;
     width = 50;
 
@@ -12,7 +12,6 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
     ];
-
 
     imageCache = [];
     currentImageIndex = 0;
@@ -29,10 +28,20 @@ class ThrowableObject extends MovableObject {
 
 
     throw() {
+        this.speedY = 20;
         setInterval(() => {
             this.x += 10;
         }, 1000 / 60);
+        console.log( this.y);
+
     }
+
+    // applyGravity() {
+    //     setInterval(() => {
+    //         this.y -= this.speedY;
+    //         this.speedY -= this.acceleration;
+    //     }, 1000 / 25);
+    // }
 
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
@@ -40,7 +49,7 @@ class ThrowableObject extends MovableObject {
         this.img = this.imageCache[path];
         this.currentImageIndex++;
     }
-    
+
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_ROTATION);
