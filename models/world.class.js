@@ -15,6 +15,9 @@ class World {
     camera_x = 0;
     level = level1;
     hit = false;
+    bottleStatusbar = new BottleStatusbar();
+    coinStatusbar = new CoinStatusbar();
+
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
@@ -30,9 +33,6 @@ class World {
         }
     }
 
-
-
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
@@ -42,26 +42,59 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
+        this.run();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusbar[0].setPercentage(this.character.energy);
-                    this.hit = true;
-                    setTimeout(() => {
-                        this.hit = false;
-                    }, 500);
-                }
-            });
+            this.checkCollisions();
+            this.checkCollisionsBottle();
+            this.checkCollisionsCoin();
         }, 100);
     }
+
+    checkCollisions() {
+        this.enemies.forEach(enemy => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusbar[0].setPercentage(this.character.energy);
+                this.hit = true;
+                setTimeout(() => {
+                    this.hit = false;
+                }, 500);
+            }
+        });
+    }
+
+    checkCollisionsBottle() {
+        this.bottles = this.bottles.filter(bottle => {
+            if (this.character.isColliding(bottle)) {
+                this.character.collectBottle();
+                this.bottleStatusbar.setAmount(this.character.bottles);
+                return false;
+            }
+            return true;
+        });
+        console.log(this.character.bottles);
+    }
+
+    checkCollisionsCoin() {
+        this.coins = this.coins.filter(coin => {
+            if (this.character.isColliding(coin)) {
+                this.character.collectCoin();
+                this.coinStatusbar.setAmount(this.character.coins);
+                return false;
+            }
+            return true;
+        });
+        console.log(this.character.coins);
+    }
+
+
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -78,6 +111,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
         // ------ space for fixed objects like statusbar ------
         this.addObjectsToMap(this.statusbar);
+        this.addObjectsToMap([this.bottleStatusbar]);
+        this.addObjectsToMap([this.coinStatusbar]);
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);

@@ -43,7 +43,7 @@ class MovableObject extends DrawableObject {
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true;
+            return true; 
         } else {
         return this.y < 180;
         }
@@ -66,6 +66,7 @@ class MovableObject extends DrawableObject {
         let timepassed = new Date().getTime() - this.lastHit;
         return timepassed < 1000;
     }
+    
     hit() {
         this.energy -= 2;
         if (this.energy < 0) {

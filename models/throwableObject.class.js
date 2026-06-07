@@ -1,7 +1,7 @@
 class ThrowableObject extends MovableObject {
     speedY = 0;
     acceleration = 4;
-    x = 120;
+    x = 150;
     y = 190;
     height = 50;
     width = 50;
@@ -31,17 +31,10 @@ class ThrowableObject extends MovableObject {
         this.speedY = 20;
         setInterval(() => {
             this.x += 10;
-        }, 1000 / 60);
+        }, 25);
         console.log( this.y);
 
     }
-
-    // applyGravity() {
-    //     setInterval(() => {
-    //         this.y -= this.speedY;
-    //         this.speedY -= this.acceleration;
-    //     }, 1000 / 25);
-    // }
 
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;

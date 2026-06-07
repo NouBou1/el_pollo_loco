@@ -43,6 +43,8 @@ class Character extends MovableObject {
     isJumping = false;
     otherDirection = false;
     lastThrow = 0;
+    bottles = 0;
+    coins = 0;
 
 
 
@@ -52,7 +54,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.applyGravity();        
+        this.applyGravity();
         this.animate();
     }
 
@@ -108,21 +110,29 @@ class Character extends MovableObject {
 
     }
 
-
-
     jump() {
         this.speedY = 30;
         this.isJumping = true;
 
     }
 
-
     throw() {
-        let bottle = new ThrowableObject(this.x + 50, this.y + 100);
-        this.world.throwableObjects.push(bottle);
+        if (this.bottles > 0) {
+            let bottle = new ThrowableObject(this.x + 50, this.y + 100);
+            this.world.throwableObjects.push(bottle);
+            this.bottles--;
+            this.world.bottleStatusbar.setAmount(this.bottles);
+        }
     }
 
+    collectBottle() {
+        this.bottles++;
+        this.world.bottleStatusbar.setAmount(this.bottles);
+    }
 
-
+    collectCoin() {
+        this.coins++;
+        this.world.coinStatusbar.setAmount(this.coins);
+    }
 
 }
