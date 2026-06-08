@@ -9,6 +9,7 @@ class MovableObject extends DrawableObject {
     currentImageIndex = 0;
     energy = 100;
     lastHit = 0;
+    
 
 
 

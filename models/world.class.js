@@ -54,6 +54,8 @@ class World {
             this.checkCollisions();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
+            this.checkBottleEnemyCollisions();
+            this.removeCompletedSplashes();
         }, 100);
     }
 
@@ -94,6 +96,38 @@ class World {
         console.log(this.character.coins);
     }
 
+
+    checkBottleEnemyCollisions() {
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.enemies.forEach((enemy, enemyIndex) => {
+                if (bottle.isColliding(enemy)) {
+                    this.handleBottleHit(enemy, bottleIndex);
+                }
+            });
+        });
+    }
+
+    handleBottleHit(enemy, bottleIndex) {
+        enemy.hit();
+        this.throwableObjects[bottleIndex].splash();
+        if (enemy.isDead()) {
+             enemy.speed = 0;
+            setTimeout(() => {
+                this.removeEnemy(this.enemies.indexOf(enemy));
+            }, 1000);
+    
+        }
+    }
+
+    removeEnemy(enemyIndex) {
+        this.enemies.splice(enemyIndex, 1);
+    }
+
+    removeCompletedSplashes() {
+    this.throwableObjects = this.throwableObjects.filter(bottle => 
+        !bottle.splashAnimationComplete
+    );
+}
 
 
     draw() {
