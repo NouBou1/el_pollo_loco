@@ -51,7 +51,8 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollisions();
+            this.checkJumpOnEnemy();
+            // this.checkCollisions();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
@@ -111,11 +112,11 @@ class World {
         enemy.hit();
         this.throwableObjects[bottleIndex].splash();
         if (enemy.isDead()) {
-             enemy.speed = 0;
+            enemy.speed = 0;
             setTimeout(() => {
                 this.removeEnemy(this.enemies.indexOf(enemy));
             }, 1000);
-    
+
         }
     }
 
@@ -124,10 +125,10 @@ class World {
     }
 
     removeCompletedSplashes() {
-    this.throwableObjects = this.throwableObjects.filter(bottle => 
-        !bottle.splashAnimationComplete
-    );
-}
+        this.throwableObjects = this.throwableObjects.filter(bottle =>
+            !bottle.splashAnimationComplete
+        );
+    }
 
 
     draw() {
@@ -183,6 +184,31 @@ class World {
         }
     }
 
-
+checkJumpOnEnemy() {
+    this.enemies.forEach((enemy, index) => {
+        if (this.character.isColliding(enemy)) {
+            
+            if (this.character.y + this.character.height - 30 < enemy.y && this.character.speedY < 0) {
+                // Vertikale Kollision
+                enemy.hit();
+                if (enemy.isDead()) {
+                    enemy.speed = 0;
+                    setTimeout(() => {
+                        this.removeEnemy(index);
+                    }, 500);
+                }
+                this.character.jump();
+            } else if (!enemy.isDead()) {
+                // Horizontale Kollision 
+                this.character.hit();
+                this.statusbar[0].setPercentage(this.character.energy);
+                this.hit = true;
+                setTimeout(() => {
+                    this.hit = false;
+                }, 500);
+            }
+        }
+    });
+}
 
 }
