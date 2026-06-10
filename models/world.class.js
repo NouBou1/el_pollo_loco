@@ -94,9 +94,8 @@ class World {
             }
             return true;
         });
-        console.log(this.character.coins);
+      
     }
-
 
     checkBottleEnemyCollisions() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
@@ -184,31 +183,31 @@ class World {
         }
     }
 
-checkJumpOnEnemy() {
-    this.enemies.forEach((enemy, index) => {
-        if (this.character.isColliding(enemy)) {
-            
-            if (this.character.y + this.character.height - 30 < enemy.y && this.character.speedY < 0) {
-                // Vertikale Kollision
-                enemy.hit();
-                if (enemy.isDead()) {
-                    enemy.speed = 0;
+    checkJumpOnEnemy() {
+        this.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy)) {
+
+                if (this.character.y + this.character.height - 30 < enemy.y && this.character.speedY < 0) {
+                    // Vertikale Kollision
+                    enemy.hit();
+                    if (enemy.isDead()) {
+                        enemy.speed = 0;
+                        setTimeout(() => {
+                            this.removeEnemy(index);
+                        }, 500);
+                    }
+                    this.character.jump();
+                } else if (!enemy.isDead()) {
+                    // Horizontale Kollision 
+                    this.character.hit();
+                    this.statusbar[0].setPercentage(this.character.energy);
+                    this.hit = true;
                     setTimeout(() => {
-                        this.removeEnemy(index);
+                        this.hit = false;
                     }, 500);
                 }
-                this.character.jump();
-            } else if (!enemy.isDead()) {
-                // Horizontale Kollision 
-                this.character.hit();
-                this.statusbar[0].setPercentage(this.character.energy);
-                this.hit = true;
-                setTimeout(() => {
-                    this.hit = false;
-                }, 500);
             }
-        }
-    });
-}
+        });
+    }
 
 }

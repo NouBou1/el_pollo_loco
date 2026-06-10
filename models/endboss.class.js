@@ -1,5 +1,5 @@
 class Endboss extends MovableObject {
-    x = 3100;
+    x = 400;
     y = -30;
     height = 500;
     width = 400;
@@ -29,15 +29,19 @@ class Endboss extends MovableObject {
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
-  
+        this.loadImages(this.IMAGES_ALERT);
         this.animate();
     }
 
     animate() {
-        this.loadImages(this.IMAGES_ALERT);
+        let i = 0;
         setInterval(() => {
-            
-            this.playAnimation(this.IMAGES_ALERT);
+            if (i < 10) {
+                this.playAnimation(this.IMAGES_WALKING);
+            } else if (i >= 10) {
+                this.playAnimation(this.IMAGES_ALERT);
+            }
+            i++;
         }, 1000 / 2);
     }
 } 
