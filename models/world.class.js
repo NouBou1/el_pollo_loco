@@ -52,7 +52,6 @@ class World {
     run() {
         setInterval(() => {
             this.checkJumpOnEnemy();
-            // this.checkCollisions();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
@@ -94,7 +93,7 @@ class World {
             }
             return true;
         });
-      
+
     }
 
     checkBottleEnemyCollisions() {
@@ -186,8 +185,10 @@ class World {
     checkJumpOnEnemy() {
         this.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
+                const characterCenterY = this.character.y + this.character.height / 2;
+                const enemyCenterY = enemy.y + enemy.height / 2;
 
-                if (this.character.y + this.character.height - 30 < enemy.y && this.character.speedY < 0) {
+                if (characterCenterY < enemyCenterY && this.character.speedY < 0) {
                     // Vertikale Kollision
                     enemy.hit();
                     if (enemy.isDead()) {
