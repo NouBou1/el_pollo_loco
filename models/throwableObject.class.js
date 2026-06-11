@@ -41,7 +41,7 @@ class ThrowableObject extends MovableObject {
         this.throwInterval = setInterval(() => {
             this.x += 10;
         }, 25);
-        console.log(this.y);
+
 
     }
 

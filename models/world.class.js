@@ -81,7 +81,6 @@ class World {
             }
             return true;
         });
-        console.log(this.character.bottles);
     }
 
     checkCollisionsCoin() {
@@ -97,14 +96,14 @@ class World {
     }
 
     checkBottleEnemyCollisions() {
-        this.throwableObjects.forEach((bottle, bottleIndex) => {
-            this.enemies.forEach((enemy, enemyIndex) => {
-                if (bottle.isColliding(enemy)) {
-                    this.handleBottleHit(enemy, bottleIndex);
-                }
-            });
+    this.throwableObjects.forEach((bottle, bottleIndex) => {
+        this.enemies.forEach((enemy, enemyIndex) => {
+            if (bottle.isColliding(enemy) && !bottle.hasHit) {  
+                this.handleBottleHit(enemy, bottleIndex);
+            }
         });
-    }
+    });
+}
 
     handleBottleHit(enemy, bottleIndex) {
         enemy.hit();
