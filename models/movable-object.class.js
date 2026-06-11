@@ -9,6 +9,7 @@ class MovableObject extends DrawableObject {
     currentImageIndex = 0;
     energy = 100;
     lastHit = 0;
+    
 
 
 
@@ -42,7 +43,11 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
+        if (this instanceof ThrowableObject) {
+            return true; 
+        } else {
         return this.y < 180;
+        }
     }
 
     applyGravity() {
@@ -51,7 +56,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-            if (this.y > 180) {
+            if (!(this instanceof ThrowableObject) && this.y > 180) {   
                 this.y = 180;
                 this.speedY = 0;
             }
@@ -62,6 +67,7 @@ class MovableObject extends DrawableObject {
         let timepassed = new Date().getTime() - this.lastHit;
         return timepassed < 1000;
     }
+    
     hit() {
         this.energy -= 2;
         if (this.energy < 0) {
