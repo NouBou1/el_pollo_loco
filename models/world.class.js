@@ -96,14 +96,14 @@ class World {
     }
 
     checkBottleEnemyCollisions() {
-    this.throwableObjects.forEach((bottle, bottleIndex) => {
-        this.enemies.forEach((enemy, enemyIndex) => {
-            if (bottle.isColliding(enemy) && !bottle.hasHit) {  
-                this.handleBottleHit(enemy, bottleIndex);
-            }
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.enemies.forEach((enemy, enemyIndex) => {
+                if (bottle.isColliding(enemy) && !bottle.hasHit) {
+                    this.handleBottleHit(enemy, bottleIndex);
+                }
+            });
         });
-    });
-}
+    }
 
     handleBottleHit(enemy, bottleIndex) {
         enemy.hit();
@@ -187,7 +187,9 @@ class World {
                 const characterCenterY = this.character.y + this.character.height / 2;
                 const enemyCenterY = enemy.y + enemy.height / 2;
 
-                if (characterCenterY < enemyCenterY && this.character.speedY < 0) {
+                const verticalDistance = enemyCenterY - characterCenterY;
+                const threshold = 20; 
+                if (verticalDistance > threshold && this.character.speedY <   0 && this.character.isAboveGround()) {
                     // Vertikale Kollision
                     enemy.hit();
                     if (enemy.isDead()) {
