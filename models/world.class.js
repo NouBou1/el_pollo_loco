@@ -38,6 +38,9 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        this.gameOverImage = new Image();
+        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
+     
         this.repeatBackground();
         this.draw();
         this.setWorld();
@@ -131,6 +134,12 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
+        if (this.character.isDead()) {
+            this.showGameOver();
+            return;
+        }
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.backgroundObjects);
         this.addObjectsToMap(this.clouds);
@@ -152,9 +161,13 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
+
+
     }
 
-
+    showGameOver() {
+        this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
+    }
 
     addObjectsToMap(objects) {
         if (!objects) {
@@ -188,8 +201,8 @@ class World {
                 const enemyCenterY = enemy.y + enemy.height / 2;
 
                 const verticalDistance = enemyCenterY - characterCenterY;
-                const threshold = 20; 
-                if (verticalDistance > threshold && this.character.speedY <   0 && this.character.isAboveGround()) {
+                const threshold = 20;
+                if (verticalDistance > threshold && this.character.speedY < 0 && this.character.isAboveGround()) {
                     // Vertikale Kollision
                     enemy.hit();
                     if (enemy.isDead()) {
