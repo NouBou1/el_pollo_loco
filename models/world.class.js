@@ -40,7 +40,7 @@ class World {
         this.character.world = this;
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
-     
+
         this.repeatBackground();
         this.draw();
         this.setWorld();
@@ -132,12 +132,10 @@ class World {
 
 
     draw() {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
         if (this.character.isDead()) {
-            this.showGameOver();
-            return;
+            return; 
         }
+
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -161,12 +159,6 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
-
-
-    }
-
-    showGameOver() {
-        this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
     addObjectsToMap(objects) {
