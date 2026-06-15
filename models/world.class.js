@@ -39,7 +39,7 @@ class World {
         this.keyboard = keyboard;
         this.character.world = this;
         this.gameOverImage = new Image();
-        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
+        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game_over_a.png';
 
         this.repeatBackground();
         this.draw();

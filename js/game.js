@@ -13,9 +13,9 @@ function init() {
 
 function loadImages() {
     gameOverImage = new Image();
-    gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
+    gameOverImage.src = 'img/9_intro_outro_screens/game_over/game_over_a.png';
     winImage = new Image();
-    winImage.src = 'img/intro_outro/You Win B.png';
+    winImage.src = 'img/intro_outro/you_win_b.png';
 }
 
 function showStartScreen() {
