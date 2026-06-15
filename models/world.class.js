@@ -113,9 +113,11 @@ class World {
         this.throwableObjects[bottleIndex].splash();
         if (enemy.isDead()) {
             enemy.speed = 0;
-            setTimeout(() => {
-                this.removeEnemy(this.enemies.indexOf(enemy));
-            }, 1000);
+            if (!(enemy instanceof Endboss)) {  
+                setTimeout(() => {
+                    this.removeEnemy(this.enemies.indexOf(enemy));
+                }, 1000);
+            }
 
         }
     }
@@ -133,9 +135,13 @@ class World {
 
     draw() {
         if (this.character.isDead()) {
-            return; 
+            return;
         }
 
+        const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss && endboss.deathAnimationComplete) {
+            return;
+        }
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -199,9 +205,11 @@ class World {
                     enemy.hit();
                     if (enemy.isDead()) {
                         enemy.speed = 0;
-                        setTimeout(() => {
-                            this.removeEnemy(index);
-                        }, 500);
+                        if (!(enemy instanceof Endboss)) { 
+                            setTimeout(() => {
+                                this.removeEnemy(index);
+                            }, 500);
+                        }
                     }
                     this.character.jump();
                 } else if (!enemy.isDead()) {

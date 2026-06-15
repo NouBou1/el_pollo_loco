@@ -3,6 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let gameStarted = false;
 let gameOverImage;
+let winImage;
 
 function init() {
     canvas = document.getElementById("game-canvas");
@@ -13,6 +14,8 @@ function init() {
 function loadImages() {
     gameOverImage = new Image();
     gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
+    winImage = new Image();
+    winImage.src = 'img/intro_outro/You Win B.png';
 }
 
 function showStartScreen() {
@@ -27,16 +30,26 @@ function showStartScreen() {
 function startGame() {
     gameStarted = true;
     world = new World(canvas, keyboard);
-    checkGameOver(); 
+    checkGameState();
 }
 
-function checkGameOver() {
+function checkGameState() {
     setInterval(() => {
-        if (world && world.character.isDead() && gameStarted) {
+        if (!world || !gameStarted) return;
+
+        if (world.character.isDead()) {
             showGameOver();
+        } else if (isEndbossDefeated()) {
+            showWin();
         }
     }, 100);
 }
+
+function isEndbossDefeated() {
+    const endboss = world.enemies.find(enemy => enemy instanceof Endboss);
+    return endboss && endboss.isDead() && endboss.deathAnimationComplete;
+}
+
 
 function showGameOver() {
     gameStarted = false;
@@ -44,9 +57,21 @@ function showGameOver() {
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
 }
 
+function showWin() {
+    gameStarted = false;
+    let ctx = canvas.getContext('2d');
+
+    let scale = 0.7;
+    let imgWidth = canvas.width * scale;
+    let imgHeight = (winImage.height / winImage.width) * imgWidth;
+
+    let x = (canvas.width - imgWidth) / 2;
+    let y = (canvas.height - imgHeight) / 2;
+    ctx.drawImage(winImage, x, y, imgWidth, imgHeight);
+}
+
 function restartGame() {
-    world = null;
-    startGame(); 
+    location.reload();  
 }
 
 window.addEventListener("keydown", (e) => {
@@ -93,7 +118,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-    if (!gameStarted && e.keyCode === 13) { 
+    if (!gameStarted && e.keyCode === 13) {
         if (world) {
             restartGame();
         } else {

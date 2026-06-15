@@ -5,7 +5,9 @@ body{
     align-items: center;
     height: 98dvh;
     width: 99dvw;
-
+    background-image: url('img/5_background/desert-background2.png');
+    background-position: center;
+    background-size: cover;
 }
 
 canvas{

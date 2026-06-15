@@ -4,7 +4,9 @@ class Endboss extends MovableObject {
     height = 500;
     width = 400;
     speed = 0.15;
-    energy = 40;
+    energy = 20;
+    deathAnimationComplete = false;
+    deathAnimationIndex = 0;
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -48,7 +50,7 @@ class Endboss extends MovableObject {
         let i = 0;
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                this.playDeathAnimation();
             } else if (this.isHit()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else {
@@ -64,5 +66,15 @@ class Endboss extends MovableObject {
             }
 
         }, 1000 / 2);
+    }
+
+      playDeathAnimation() {  // ← NEU: Diese ganze Methode
+        if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+            let path = this.IMAGES_DEAD[this.deathAnimationIndex];
+            this.img = this.imageCache[path];
+            this.deathAnimationIndex++;
+        } else {
+            this.deathAnimationComplete = true;
+        }
     }
 } 
