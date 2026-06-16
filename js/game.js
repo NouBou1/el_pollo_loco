@@ -74,6 +74,20 @@ function restartGame() {
     location.reload();  
 }
 
+function toggleLegend() {
+    const legend = document.getElementById('controls-legend');
+    const button = document.getElementById('toggle-legend-btn');
+    
+    legend.classList.toggle('hidden');
+    
+  
+    if (legend.classList.contains('hidden')) {
+        button.textContent = 'Steuerung anzeigen';
+    } else {
+        button.textContent = '✖ Steuerung ausblenden';
+    }
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.keyCode === 32) {
         keyboard.SPACE = true;

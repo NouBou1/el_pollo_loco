@@ -118,7 +118,7 @@ class Character extends MovableObject {
 
     throw() {
         if (this.bottles > 0) {
-            let bottle = new ThrowableObject(this.x + 50, this.y + 100);
+            let bottle = new ThrowableObject(this.x + 50, this.y + 100, this.otherDirection);
             this.world.throwableObjects.push(bottle);
             this.bottles--;
             this.world.bottleStatusbar.setAmount(this.bottles);
