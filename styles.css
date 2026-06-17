@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Danfo';
-    src: url('fonts/Danfo-Regular-VariableFont_ELSH.ttf') format('truetype');
+    src: url('assets/fonts/Danfo-Regular-VariableFont_ELSH.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -12,7 +12,7 @@ body{
     align-items: center;
     height: 98dvh;
     width: 99dvw;
-    background-image: url('img/5_background/desert-background2.png');
+    background-image: url('assets/img/5_background/desert-background2.png');
     background-position: center;
     background-size: cover;
 }

@@ -13,15 +13,15 @@ function init() {
 
 function loadImages() {
     gameOverImage = new Image();
-    gameOverImage.src = 'img/9_intro_outro_screens/game_over/game_over_a.png';
+    gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
     winImage = new Image();
-    winImage.src = 'img/intro_outro/you_win_b.png';
+    winImage.src = 'assets/img/intro_outro/you_win_b.png';
 }
 
 function showStartScreen() {
     let ctx = canvas.getContext('2d');
     let startImage = new Image();
-    startImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
+    startImage.src = 'assets/img/9_intro_outro_screens/start/startscreen_1.png';
     startImage.onload = () => {
         ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
     };

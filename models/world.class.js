@@ -25,10 +25,10 @@ class World {
             const imgIndex = (i % 2) + 1;
 
             this.backgroundObjects.push(
-                new BackgroundObject('img/5_background/layers/air.png', x, 0),
-                new BackgroundObject(`img/5_background/layers/2_second_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`img/5_background/layers/3_third_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`img/5_background/layers/1_first_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject('assets/img/5_background/layers/air.png', x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/2_second_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/3_third_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/1_first_layer/${imgIndex}.png`, x, 0),
             );
         }
     }
@@ -39,7 +39,7 @@ class World {
         this.keyboard = keyboard;
         this.character.world = this;
         this.gameOverImage = new Image();
-        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game_over_a.png';
+        this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
 
         this.repeatBackground();
         this.draw();
