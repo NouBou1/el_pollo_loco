@@ -25,10 +25,10 @@ class World {
             const imgIndex = (i % 2) + 1;
 
             this.backgroundObjects.push(
-                new BackgroundObject('img/5_background/layers/air.png', x, 0),
-                new BackgroundObject(`img/5_background/layers/2_second_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`img/5_background/layers/3_third_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`img/5_background/layers/1_first_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject('assets/img/5_background/layers/air.png', x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/2_second_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/3_third_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/1_first_layer/${imgIndex}.png`, x, 0),
             );
         }
     }
@@ -38,6 +38,9 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        this.gameOverImage = new Image();
+        this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
+
         this.repeatBackground();
         this.draw();
         this.setWorld();
@@ -96,23 +99,25 @@ class World {
     }
 
     checkBottleEnemyCollisions() {
-    this.throwableObjects.forEach((bottle, bottleIndex) => {
-        this.enemies.forEach((enemy, enemyIndex) => {
-            if (bottle.isColliding(enemy) && !bottle.hasHit) {  
-                this.handleBottleHit(enemy, bottleIndex);
-            }
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.enemies.forEach((enemy, enemyIndex) => {
+                if (bottle.isColliding(enemy) && !bottle.hasHit) {
+                    this.handleBottleHit(enemy, bottleIndex);
+                }
+            });
         });
-    });
-}
+    }
 
     handleBottleHit(enemy, bottleIndex) {
         enemy.hit();
         this.throwableObjects[bottleIndex].splash();
         if (enemy.isDead()) {
             enemy.speed = 0;
-            setTimeout(() => {
-                this.removeEnemy(this.enemies.indexOf(enemy));
-            }, 1000);
+            if (!(enemy instanceof Endboss)) {  
+                setTimeout(() => {
+                    this.removeEnemy(this.enemies.indexOf(enemy));
+                }, 1000);
+            }
 
         }
     }
@@ -129,6 +134,14 @@ class World {
 
 
     draw() {
+        if (this.character.isDead()) {
+            return;
+        }
+
+        const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss && endboss.deathAnimationComplete) {
+            return;
+        }
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -153,8 +166,6 @@ class World {
             self.draw();
         });
     }
-
-
 
     addObjectsToMap(objects) {
         if (!objects) {
@@ -187,14 +198,18 @@ class World {
                 const characterCenterY = this.character.y + this.character.height / 2;
                 const enemyCenterY = enemy.y + enemy.height / 2;
 
-                if (characterCenterY < enemyCenterY && this.character.speedY < 0) {
+                const verticalDistance = enemyCenterY - characterCenterY;
+                const threshold = 20;
+                if (verticalDistance > threshold && this.character.speedY < 0 && this.character.isAboveGround()) {
                     // Vertikale Kollision
                     enemy.hit();
                     if (enemy.isDead()) {
                         enemy.speed = 0;
-                        setTimeout(() => {
-                            this.removeEnemy(index);
-                        }, 500);
+                        if (!(enemy instanceof Endboss)) { 
+                            setTimeout(() => {
+                                this.removeEnemy(index);
+                            }, 500);
+                        }
                     }
                     this.character.jump();
                 } else if (!enemy.isDead()) {

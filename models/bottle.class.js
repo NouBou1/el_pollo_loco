@@ -5,7 +5,7 @@ class Bottle extends DrawableObject {
     width = 60;
 
     constructor(x) {
-        super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
+        super().loadImage('assets/img/6_salsa_bottle/salsa_bottle.png');
         this.x = x || 200 + Math.random() * 3000;
     }
 }
