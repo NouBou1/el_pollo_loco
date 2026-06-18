@@ -27,11 +27,15 @@ h1 {
 }
 
 canvas{
-    background-color: black; 
+    background-color: black;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     border: 4px solid #8B4513;
     border-radius: 15px;
-} 
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 720 / 480;
+    height: auto;
+}
 
 
 
@@ -124,4 +128,103 @@ kbd {
     text-align: center;
     border: 3px solid #8B4513;
     font-family: 'Danfo', serif;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 36px;
+    }
+
+    #toggle-legend-btn {
+        font-size: 20px;
+        padding: 8px 16px;
+    }
+
+    .legend {
+        padding: 16px 20px;
+        max-height: 85dvh;
+        overflow-y: auto;
+    }
+
+    .legend h2 {
+        font-size: 20px;
+        margin: 0 0 12px 0;
+    }
+
+    .controls-list {
+        gap: 10px 14px;
+    }
+
+    .controls-list dd {
+        font-size: 16px;
+    }
+
+    kbd {
+        font-size: 16px;
+        padding: 4px 12px;
+        min-width: 50px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    body {
+        height: 100dvh;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-size: 21px;
+        line-height: 1;
+        letter-spacing: 0;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    canvas {
+        flex: 0 0 auto;
+        height: calc(100dvh - 80px);
+        width: auto;
+        max-width: 100%;
+        border-width: 2px;
+    }
+
+    #toggle-legend-btn {
+        font-size: 10px;
+        padding: 1px 6px;
+        margin-top: 0;
+        border-width: 1px;
+        flex: 0 0 auto;
+    }
+
+    .legend {
+        padding: 10px 14px;
+        max-width: 50vw;
+        max-height: 90dvh;
+        overflow-y: auto;
+    }
+
+    .legend h2 {
+        font-size: 14px;
+        margin: 0 0 8px 0;
+        padding-bottom: 4px;
+    }
+
+    .controls-list {
+        gap: 6px 10px;
+    }
+
+    .controls-list dd {
+        font-size: 11px;
+    }
+
+    kbd {
+        font-size: 11px;
+        padding: 2px 8px;
+        min-width: 30px;
+        border-width: 2px;
+    }
 }
