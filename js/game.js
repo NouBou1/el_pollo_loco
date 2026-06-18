@@ -9,6 +9,39 @@ function init() {
     canvas = document.getElementById("game-canvas");
     loadImages();
     showStartScreen();
+    setupMobileControls();
+    canvasTapToStart();
+}
+
+function canvasTapToStart() {
+    canvas.addEventListener('pointerdown', () => {
+        if (!gameStarted) {
+            startOrRestartGame();
+        }
+    });
+}
+
+function setupMobileControls() {
+    bindControlButton('btn-left', 'LEFT');
+    bindControlButton('btn-right', 'RIGHT');
+    bindControlButton('btn-jump', 'SPACE');
+    bindControlButton('btn-throw', 'D');
+}
+
+function bindControlButton(buttonId, keyboardKey) {
+    const button = document.getElementById(buttonId);
+    const press = (e) => {
+        e.preventDefault();
+        keyboard[keyboardKey] = true;
+    };
+    const release = (e) => {
+        e.preventDefault();
+        keyboard[keyboardKey] = false;
+    };
+    button.addEventListener('pointerdown', press);
+    button.addEventListener('pointerup', release);
+    button.addEventListener('pointerleave', release);
+    button.addEventListener('pointercancel', release);
 }
 
 function loadImages() {
@@ -133,10 +166,14 @@ window.addEventListener("keyup", (e) => {
 
 document.addEventListener('keydown', (e) => {
     if (!gameStarted && e.keyCode === 13) {
-        if (world) {
-            restartGame();
-        } else {
-            startGame();
-        }
+        startOrRestartGame();
     }
 });
+
+function startOrRestartGame() {
+    if (world) {
+        restartGame();
+    } else {
+        startGame();
+    }
+}
