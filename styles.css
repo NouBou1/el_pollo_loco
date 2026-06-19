@@ -210,7 +210,7 @@ kbd {
     }
 }
 
-@media (orientation: landscape) and (max-height: 500px) {
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
     body {
         height: 100dvh;
         flex-direction: column;
