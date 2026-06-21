@@ -45,8 +45,9 @@ class Character extends MovableObject {
     lastThrow = 0;
     bottles = 0;
     coins = 0;
-
-
+    hurtSoundLastHit = 0;
+    deathSoundPlayed = false;
+    sounds = new SoundManager();
 
     constructor() {
         super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');
@@ -95,16 +96,29 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
+                if (!this.deathSoundPlayed) {
+                    this.sounds.playDeathSound();
+                    this.deathSoundPlayed = true;
+                }
+                this.sounds.pauseWalkingSound();
             } else if (this.isHit()) {
                 this.playAnimation(this.IMAGES_HURT);
+                if (this.hurtSoundLastHit !== this.lastHit) {
+                    this.sounds.playHurtSound();
+                    this.hurtSoundLastHit = this.lastHit;
+                }
+                this.sounds.pauseWalkingSound();
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
+                this.sounds.pauseWalkingSound();
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
+                this.sounds.playWalkingSound();
             }
 
             else {
                 this.loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');
+                this.sounds.pauseWalkingSound();
             }
         }, 100);
 
@@ -113,12 +127,12 @@ class Character extends MovableObject {
     jump() {
         this.speedY = 30;
         this.isJumping = true;
-
+        this.sounds.playJumpingSound();
     }
 
     throw() {
         if (this.bottles > 0) {
-            let bottle = new ThrowableObject(this.x + 50, this.y + 100, this.otherDirection);
+            let bottle = new ThrowableObject(this.x + 50, this.y + 100, this.otherDirection, this.sounds);
             this.world.throwableObjects.push(bottle);
             this.bottles--;
             this.world.bottleStatusbar.setAmount(this.bottles);
@@ -128,11 +142,13 @@ class Character extends MovableObject {
     collectBottle() {
         this.bottles++;
         this.world.bottleStatusbar.setAmount(this.bottles);
+        this.sounds.playCollectBottleSound();
     }
 
     collectCoin() {
         this.coins++;
         this.world.coinStatusbar.setAmount(this.coins);
+        this.sounds.playCollectCoinSound();
     }
 
 }

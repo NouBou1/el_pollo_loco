@@ -23,12 +23,14 @@ class ThrowableObject extends MovableObject {
     currentImageIndex = 0;
     hasHit = false;
     splashAnimationComplete = false;
+    sounds;
 
-    constructor(x, y, otherDirection = false) {
+    constructor(x, y, otherDirection = false, sounds) {
         super().loadImage('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.x = x;
         this.y = y;
         this.otherDirection = otherDirection;
+        this.sounds = sounds;
         this.loadImages(this.IMAGES_ROTATION);
         this.loadImages(this.IMAGES_SPLASH);
         this.applyGravity();
@@ -70,6 +72,7 @@ class ThrowableObject extends MovableObject {
         clearInterval(this.throwInterval);
         this.speedY = 0;
         this.currentImageIndex = 0;
+        this.sounds.playBreakSound();
     }
 
     playSplashAnimation() {
