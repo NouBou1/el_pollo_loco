@@ -59,7 +59,7 @@ class World {
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
             this.removeCompletedSplashes();
-        }, 100);
+        }, 1000/60);
     }
 
     checkCollisions() {

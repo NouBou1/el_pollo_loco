@@ -2,7 +2,11 @@ class SmallChicken extends MovableObject {
     height = 50;
     width = 50;
     y = 380;
+    groundY = 380;
     energy = 1;
+    speedY = 0;
+    acceleration = 2;
+    isJumping = false;
     IMAGES_WALKING = [
         'assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'assets/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
@@ -23,6 +27,8 @@ class SmallChicken extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.animate();
+        this.applyChickenGravity();
+        this.scheduleNextJump();
     }
 
 
@@ -35,5 +41,35 @@ class SmallChicken extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING);
             }
         }, 100);
+    }
+
+    jump() {
+        if (this.isDead() || this.isJumping) {
+            return;
+        }
+        this.isJumping = true;
+        this.speedY = 25;
+    }
+
+    applyChickenGravity() {
+        setInterval(() => {
+            if (this.isJumping) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+                if (this.y >= this.groundY) {
+                    this.y = this.groundY;
+                    this.speedY = 0;
+                    this.isJumping = false;
+                }
+            }
+        }, 1000 / 25);
+    }
+
+    scheduleNextJump() {
+        const delay = 2000 + Math.random() * 3000;
+        setTimeout(() => {
+            this.jump();
+            this.scheduleNextJump();
+        }, delay);
     }
 }
