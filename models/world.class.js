@@ -21,7 +21,7 @@ class World {
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
-            const x = i * 719;
+            const x = i * 718;
             const imgIndex = (i % 2) + 1;
 
             this.backgroundObjects.push(
@@ -38,6 +38,10 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss) {
+            endboss.world = this;
+        }
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
 
@@ -59,13 +63,13 @@ class World {
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
             this.removeCompletedSplashes();
-        }, 1000/60);
+        }, 1000 / 60);
     }
 
     checkCollisions() {
         this.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
+                this.character.hit(enemy.contactDamage);
                 this.statusbar[0].setPercentage(this.character.energy);
                 this.hit = true;
                 setTimeout(() => {
@@ -113,7 +117,7 @@ class World {
         this.throwableObjects[bottleIndex].splash();
         if (enemy.isDead()) {
             enemy.speed = 0;
-            if (!(enemy instanceof Endboss)) {  
+            if (!(enemy instanceof Endboss)) {
                 setTimeout(() => {
                     this.removeEnemy(this.enemies.indexOf(enemy));
                 }, 1000);
@@ -197,29 +201,32 @@ class World {
             if (this.character.isColliding(enemy)) {
                 const characterCenterY = this.character.y + this.character.height / 2;
                 const enemyCenterY = enemy.y + enemy.height / 2;
-
                 const verticalDistance = enemyCenterY - characterCenterY;
                 const threshold = 20;
-                if (verticalDistance > threshold && this.character.speedY < 0 && this.character.isAboveGround()) {
-                    // Vertikale Kollision
+
+                const isVerticalAttack = verticalDistance > threshold &&
+                    this.character.speedY < 0 &&
+                    this.character.isAboveGround();
+
+                if (isVerticalAttack) {
+                    // Vertikale Kollision 
                     enemy.hit();
                     if (enemy.isDead()) {
                         enemy.speed = 0;
-                        if (!(enemy instanceof Endboss)) { 
+                        if (!(enemy instanceof Endboss)) {
                             setTimeout(() => {
                                 this.removeEnemy(index);
                             }, 500);
                         }
                     }
                     this.character.jump();
-                } else if (!enemy.isDead()) {
-                    // Horizontale Kollision 
-                    this.character.hit();
+                } else if (!enemy.isDead() && !this.character.isHit()) {
+                    // Horizontale Kollision
+                    const now = new Date().getTime();
+                    const timeSinceLastHit = now - this.character.lastHit;
+                    console.log(` Zeit seit letztem Hit: ${timeSinceLastHit}ms`);
+                    this.character.hit(enemy.contactDamage);
                     this.statusbar[0].setPercentage(this.character.energy);
-                    this.hit = true;
-                    setTimeout(() => {
-                        this.hit = false;
-                    }, 500);
                 }
             }
         });

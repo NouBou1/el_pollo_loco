@@ -4,6 +4,7 @@ class SmallChicken extends MovableObject {
     y = 380;
     groundY = 380;
     energy = 1;
+    contactDamage = 1;
     speedY = 0;
     acceleration = 2;
     isJumping = false;
