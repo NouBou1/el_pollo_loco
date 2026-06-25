@@ -37,4 +37,11 @@ class Chicken extends MovableObject {
             }
         }, 100);
     }
+
+    hit(damage = 2) {
+        super.hit(damage);
+        if (this.sounds) {
+            this.sounds.playChickenHurtSound();
+        }
+    }
 }

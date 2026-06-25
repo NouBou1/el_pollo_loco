@@ -16,6 +16,7 @@ class Endboss extends MovableObject {
     attackRange = 100;
     deathAnimationComplete = false;
     deathAnimationIndex = 0;
+    deathSoundPlayed = false;
     IMAGES_WALKING = [
         'assets/img/4_enemie_boss_chicken/1_walk/G1.png',
         'assets/img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -97,6 +98,9 @@ class Endboss extends MovableObject {
     checkTrigger() {
         if (!this.triggered && this.world && this.world.character.x > this.triggerX) {
             this.triggered = true;
+            if (this.sounds) {
+                this.sounds.playBossAlertSound();
+            }
         }
     }
 
@@ -137,6 +141,16 @@ class Endboss extends MovableObject {
         this.isAttacking = true;
         this.attackImageIndex = 0;
         this.lastAttack = Date.now();
+        if (this.sounds) {
+            this.sounds.playBossAttackSound();
+        }
+    }
+
+    hit(damage = 2) {
+        super.hit(damage);
+        if (this.sounds) {
+            this.sounds.playBossHitSound();
+        }
     }
 
     playAttackAnimation() {
@@ -164,6 +178,10 @@ class Endboss extends MovableObject {
     }
 
     playDeathAnimation() {
+        if (!this.deathSoundPlayed && this.sounds) {
+            this.sounds.playBossDeathSound();
+            this.deathSoundPlayed = true;
+        }
         if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
             let path = this.IMAGES_DEAD[this.deathAnimationIndex];
             this.img = this.imageCache[path];

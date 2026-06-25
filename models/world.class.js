@@ -38,6 +38,9 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        this.enemies.forEach(enemy => {
+            enemy.sounds = this.character.sounds;
+        });
         const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss) {
             endboss.world = this;
@@ -45,6 +48,7 @@ class World {
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
 
+        this.character.sounds.playChickenWalkingSound();
         this.repeatBackground();
         this.draw();
         this.setWorld();

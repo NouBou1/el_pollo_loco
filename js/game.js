@@ -86,14 +86,17 @@ function isEndbossDefeated() {
 
 function showGameOver() {
     gameStarted = false;
+    world.character.sounds.stopAllSounds();
+    world.character.sounds.playGameOverSound();
     let ctx = canvas.getContext('2d');
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
 }
 
 function showWin() {
     gameStarted = false;
+    world.character.sounds.stopAllSounds();
+    world.character.sounds.playVictorySound();
     let ctx = canvas.getContext('2d');
-
     let scale = 0.7;
     let imgWidth = canvas.width * scale;
     let imgHeight = (winImage.height / winImage.width) * imgWidth;
@@ -104,16 +107,16 @@ function showWin() {
 }
 
 function restartGame() {
-    location.reload();  
+    location.reload();
 }
 
 function toggleLegend() {
     const legend = document.getElementById('controls-legend');
     const button = document.getElementById('toggle-legend-btn');
-    
+
     legend.classList.toggle('hidden');
-    
-  
+
+
     if (legend.classList.contains('hidden')) {
         button.textContent = 'Steuerung anzeigen';
     } else {

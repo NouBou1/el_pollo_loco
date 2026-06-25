@@ -73,4 +73,11 @@ class SmallChicken extends MovableObject {
             this.scheduleNextJump();
         }, delay);
     }
+
+    hit(damage = 2) {
+        super.hit(damage);
+        if (this.sounds) {
+            this.sounds.playChickenHurtSound();
+        }
+    }
 }
