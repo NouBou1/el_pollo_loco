@@ -72,7 +72,7 @@ class Character extends MovableObject {
     hurtSoundLastHit = 0;
     deathSoundPlayed = false;
     lastMovement = Date.now();
-    sounds = new SoundManager();
+    sounds;
 
     constructor() {
         super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');

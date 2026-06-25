@@ -33,11 +33,12 @@ class World {
         }
     }
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, soundManager) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        this.character.sounds = soundManager;
         this.enemies.forEach(enemy => {
             enemy.sounds = this.character.sounds;
         });

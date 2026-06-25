@@ -4,6 +4,7 @@ let keyboard = new Keyboard();
 let gameStarted = false;
 let gameOverImage;
 let winImage;
+let soundManager = new SoundManager();
 
 function init() {
     canvas = document.getElementById("game-canvas");
@@ -11,6 +12,7 @@ function init() {
     showStartScreen();
     setupMobileControls();
     canvasTapToStart();
+    soundManager.playBackgroundMusic();
 }
 
 function canvasTapToStart() {
@@ -62,7 +64,7 @@ function showStartScreen() {
 
 function startGame() {
     gameStarted = true;
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, soundManager);
     checkGameState();
 }
 
