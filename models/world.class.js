@@ -178,7 +178,7 @@ class World {
 
 
     draw() {
-        if (this.character.isDead()) {
+        if (this.character.isDead() && this.character.deathAnimationComplete) {
             return;
         }
 

@@ -72,8 +72,9 @@ function checkGameState() {
     setInterval(() => {
         if (!world || !gameStarted) return;
 
-        if (world.character.isDead()) {
-            showGameOver();
+        if (world.character.isDead() && world.character.deathAnimationComplete) {
+                showGameOver();
+            
         } else if (isEndbossDefeated()) {
             showWin();
         }

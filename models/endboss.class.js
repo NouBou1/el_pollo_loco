@@ -1,18 +1,19 @@
 class Endboss extends MovableObject {
-    x = 3400;
+    x = 3800;
     y = -30;
     height = 500;
     width = 400;
     speed = 2;
     energy = 20;
+    contactDamage = 7;
     offset = {
         top: 100,
         left: 50,
         right: 50,
         bottom: 50
     };
-    targetX = 2900;
-    triggerX = 2000;
+    targetX = 3550;
+    triggerX = 3100;
     triggered = false;
     arrived = false;
     isAttacking = false;
@@ -174,7 +175,7 @@ class Endboss extends MovableObject {
     hitCharacterIfInRange() {
         const character = this.world.character;
         if (this.getGapToCharacter() < this.attackRange && !character.isDead()) {
-            character.hit(10);
+            character.hit(20);
             this.world.statusbar[0].setPercentage(character.energy);
             this.world.hit = true;
             setTimeout(() => {

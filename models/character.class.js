@@ -6,10 +6,10 @@ class Character extends MovableObject {
     speed = 3;
 
     offset = {
-        top: 100,      
-        left: 20,      
+        top: 100,
+        left: 20,
         right: 20,
-        bottom: 5      
+        bottom: 5
     };
     IMAGES_WALKING = [
         'assets/img/2_character_pepe/2_walk/W-21.png',
@@ -78,6 +78,8 @@ class Character extends MovableObject {
     coins = 0;
     hurtSoundLastHit = 0;
     deathSoundPlayed = false;
+    deathAnimationIndex = 0;
+    deathAnimationComplete = false;
     lastMovement = Date.now();
     sounds;
     gameEnded = false;
@@ -130,18 +132,15 @@ class Character extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.isDead()) {
+                console.log('Character is DEAD! Energy:', this.energy, 'deathAnimationIndex:', this.deathAnimationIndex);
+                this.playDeathAnimation();
+                return;
+            }
             if (this.gameEnded) {
                 return;
             }
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                if (!this.deathSoundPlayed) {
-                    this.sounds.playDeathSound();
-                    this.deathSoundPlayed = true;
-                }
-                this.sounds.pauseWalkingSound();
-                this.sounds.pauseSnoringSound();
-            } else if (this.isHit()) {
+            else if (this.isHit()) {
                 this.playAnimation(this.IMAGES_HURT);
                 if (this.hurtSoundLastHit !== this.lastHit) {
                     this.sounds.playHurtSound();
@@ -160,7 +159,7 @@ class Character extends MovableObject {
             }
             else {
                 let idleTime = Date.now() - this.lastMovement;
-                if (idleTime > 5000) {
+                if (idleTime > 10000) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
                     this.sounds.playSnoringSound();
                 } else {
@@ -200,6 +199,39 @@ class Character extends MovableObject {
         this.coins++;
         this.world.coinStatusbar.setAmount(this.coins);
         this.sounds.playCollectCoinSound();
+    }
+
+    // playDeathAnimation() {
+    //     if (!this.deathSoundPlayed) {
+    //         this.sounds.playDeathSound();
+    //         this.deathSoundPlayed = true;
+    //     }
+    //     this.sounds.pauseWalkingSound();
+    //     this.sounds.pauseSnoringSound();
+
+
+    //     if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+    //         let path = this.IMAGES_DEAD[this.deathAnimationIndex];
+    //         this.img = this.imageCache[path];
+    //         this.deathAnimationIndex++;
+    //     }
+
+    // }
+    playDeathAnimation() {
+        if (!this.deathSoundPlayed) {
+            this.sounds.playDeathSound();
+            this.deathSoundPlayed = true;
+        }
+        this.sounds.pauseWalkingSound();
+        this.sounds.pauseSnoringSound();
+
+        if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+            let path = this.IMAGES_DEAD[this.deathAnimationIndex];
+            this.img = this.imageCache[path];
+            this.deathAnimationIndex++;
+        } else {
+            this.deathAnimationComplete = true;
+        }
     }
 
 }
