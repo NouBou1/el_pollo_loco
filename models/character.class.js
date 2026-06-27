@@ -4,7 +4,6 @@ class Character extends MovableObject {
     height = 250;
     width = 100;
     speed = 3;
-
     offset = {
         top: 100,
         left: 20,
@@ -100,37 +99,11 @@ class Character extends MovableObject {
     animate() {
 
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x + this.speed < this.world.level.levelEndX - this.width) {
-                this.x += this.speed;
-                this.otherDirection = false;
-                this.world.camera_x = -this.x + 100;
-                this.lastMovement = Date.now();
-            }
-            if (this.world.keyboard.LEFT && this.x > 110) {
-                this.x -= this.speed;
-                this.otherDirection = true;
-                this.world.camera_x = -this.x + 100;
-                this.lastMovement = Date.now();
-            }
-            if (this.world.keyboard.SPACE) {
-                if (!this.isAboveGround() && !this.isJumping) {
-                    this.jump();
-                }
-            }
-            if (!this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.isJumping = false;
-            }
-            if (this.world.keyboard.D) {
-                let currentTime = Date.now();
-                if (currentTime - this.lastThrow > 1000) {
-                    this.throw();
-                    this.lastThrow = currentTime;
-
-                }
-            }
-
+            this.handleMovement();
+            this.handleActions();
         }, 1000 / 60);
 
+   
         setInterval(() => {
             if (this.isDead()) {
                 console.log('Character is DEAD! Energy:', this.energy, 'deathAnimationIndex:', this.deathAnimationIndex);
@@ -169,7 +142,59 @@ class Character extends MovableObject {
                 this.sounds.pauseWalkingSound();
             }
         }, 100);
+    }
 
+    handleMovement() {
+        if (this.world.keyboard.RIGHT && this.x + this.speed < this.world.level.levelEndX - this.width) {
+            this.moveRight();
+        }
+        if (this.world.keyboard.LEFT && this.x > 110) {
+            this.moveLeft();
+        }
+    }
+
+    handleActions() {
+        this.handleJump();
+        this.handleThrow();
+    }
+
+    handleJump() {
+        if (this.world.keyboard.SPACE) {
+            if (!this.isAboveGround() && !this.isJumping) {
+                this.jump();
+            }
+        }
+        if (!this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.isJumping = false;
+        }
+    }
+
+    handleThrow() {
+        if (this.world.keyboard.D) {
+            let currentTime = Date.now();
+            if (currentTime - this.lastThrow > 1000) {
+                this.throw();
+                this.lastThrow = currentTime;
+            }
+        }
+    }
+
+    moveRight() {
+        this.x += this.speed;
+        this.otherDirection = false;
+        this.updateCamera();
+        this.lastMovement = Date.now();
+    }
+
+    moveLeft() {
+        this.x -= this.speed;
+        this.otherDirection = true;
+        this.updateCamera();
+        this.lastMovement = Date.now();
+    }
+
+    updateCamera() {
+        this.world.camera_x = -this.x + 100;
     }
 
     jump() {
@@ -201,22 +226,6 @@ class Character extends MovableObject {
         this.sounds.playCollectCoinSound();
     }
 
-    // playDeathAnimation() {
-    //     if (!this.deathSoundPlayed) {
-    //         this.sounds.playDeathSound();
-    //         this.deathSoundPlayed = true;
-    //     }
-    //     this.sounds.pauseWalkingSound();
-    //     this.sounds.pauseSnoringSound();
-
-
-    //     if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
-    //         let path = this.IMAGES_DEAD[this.deathAnimationIndex];
-    //         this.img = this.imageCache[path];
-    //         this.deathAnimationIndex++;
-    //     }
-
-    // }
     playDeathAnimation() {
         if (!this.deathSoundPlayed) {
             this.sounds.playDeathSound();
