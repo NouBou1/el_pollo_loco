@@ -17,6 +17,7 @@ class World {
     hit = false;
     bottleStatusbar = new BottleStatusbar();
     coinStatusbar = new CoinStatusbar();
+    endbossStatusbar = new EndbossStatusbar();
     spawnDistance = 30;      // Minimaler Abstand zwischen Gegner-Spawns in Pixeln
     nextSpawnX = 0;          // X-Position, ab der der nächste Gegner gespawnt wird
     maxChickens = 30;        // Maximale Anzahl gleichzeitig aktiver Hühner 
@@ -155,6 +156,9 @@ class World {
     handleBottleHit(enemy, bottleIndex) {
         enemy.hit();
         this.throwableObjects[bottleIndex].splash();
+        if (enemy instanceof Endboss) {
+            this.updateEndbossStatusbar(enemy);
+        }
         if (enemy.isDead()) {
             enemy.speed = 0;
             if (!(enemy instanceof Endboss)) {
@@ -168,6 +172,11 @@ class World {
 
     removeEnemy(enemyIndex) {
         this.enemies.splice(enemyIndex, 1);
+    }
+
+    updateEndbossStatusbar(endboss) {
+        const percentage = (endboss.energy / endboss.maxEnergy) * 100;
+        this.endbossStatusbar.setPercentage(percentage);
     }
 
     removeCompletedSplashes() {
@@ -202,6 +211,9 @@ class World {
         this.addObjectsToMap(this.statusbar);
         this.addObjectsToMap([this.bottleStatusbar]);
         this.addObjectsToMap([this.coinStatusbar]);
+        if (endboss && endboss.triggered) {
+            this.addObjectsToMap([this.endbossStatusbar]);
+        }
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -249,8 +261,11 @@ class World {
                     this.character.isAboveGround();
 
                 if (isVerticalAttack) {
-                    // Vertikale Kollision 
+                    // Vertikale Kollision
                     enemy.hit();
+                    if (enemy instanceof Endboss) {
+                        this.updateEndbossStatusbar(enemy);
+                    }
                     if (enemy.isDead()) {
                         enemy.speed = 0;
                         if (!(enemy instanceof Endboss)) {
