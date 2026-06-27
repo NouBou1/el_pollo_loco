@@ -9,7 +9,8 @@ class MovableObject extends DrawableObject {
     currentImageIndex = 0;
     energy = 100;
     lastHit = 0;
-    
+    contactDamage = 2;
+
 
 
 
@@ -44,9 +45,9 @@ class MovableObject extends DrawableObject {
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true; 
+            return true;
         } else {
-        return this.y < 180;
+            return this.y < 180;
         }
     }
 
@@ -56,7 +57,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-            if (!(this instanceof ThrowableObject) && this.y > 180) {   
+            if (!(this instanceof ThrowableObject) && this.y > 180) {
                 this.y = 180;
                 this.speedY = 0;
             }
@@ -65,17 +66,18 @@ class MovableObject extends DrawableObject {
 
     isHit() {
         let timepassed = new Date().getTime() - this.lastHit;
-        return timepassed < 1000;
+        return timepassed < 500;
     }
-    
-    hit() {
-        this.energy -= 2;
+
+    hit(damage = 2) {
+        const whoAmI = this.constructor.name; 
+        console.log(`${whoAmI} getroffen | Schaden: ${damage} | Energy: ${this.energy} → ${this.energy - damage}`);
+        this.energy -= damage;
         if (this.energy < 0) {
             this.energy = 0;
         }
         this.lastHit = new Date().getTime();
     }
-
     isDead() {
         return this.energy == 0;
     }

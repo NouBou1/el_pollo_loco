@@ -17,11 +17,15 @@ class World {
     hit = false;
     bottleStatusbar = new BottleStatusbar();
     coinStatusbar = new CoinStatusbar();
+    spawnDistance = 30;      // Minimaler Abstand zwischen Gegner-Spawns in Pixeln
+    nextSpawnX = 0;          // X-Position, ab der der nächste Gegner gespawnt wird
+    maxChickens = 30;        // Maximale Anzahl gleichzeitig aktiver Hühner 
+    spawnLimitX = 2400;      // Gegner spawnen bis zu dieser X-Position (vor dem Endboss)
 
 
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
-            const x = i * 719;
+            const x = i * 718;
             const imgIndex = (i % 2) + 1;
 
             this.backgroundObjects.push(
@@ -33,14 +37,23 @@ class World {
         }
     }
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, soundManager) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character.world = this;
+        this.character.sounds = soundManager;
+        this.enemies.forEach(enemy => {
+            enemy.sounds = this.character.sounds;
+        });
+        const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss) {
+            endboss.world = this;
+        }
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
 
+        this.character.sounds.playChickenWalkingSound();
         this.repeatBackground();
         this.draw();
         this.setWorld();
@@ -59,13 +72,44 @@ class World {
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
             this.removeCompletedSplashes();
-        }, 100);
+            this.spawnEnemies();
+        }, 1000 / 60);
+    }
+
+    spawnEnemies() {
+        if (!this.canSpawnEnemy()) {
+            return;
+        }
+        this.scheduleNextSpawn();
+        this.spawnChicken();
+    }
+
+    canSpawnEnemy() {
+        const beforeLimit = this.character.x < this.spawnLimitX;
+        const timeForNext = this.character.x >= this.nextSpawnX;
+        const belowMax = this.countActiveChickens() < this.maxChickens;
+        return beforeLimit && timeForNext && belowMax;
+    }
+
+    scheduleNextSpawn() {
+        this.nextSpawnX = this.character.x + this.spawnDistance + Math.random() * 200;
+    }
+
+    countActiveChickens() {
+        return this.enemies.filter(enemy => !(enemy instanceof Endboss) && !enemy.isDead()).length;
+    }
+
+    spawnChicken() {
+        const spawnX = this.character.x + this.canvas.width + 100 + Math.random() * 200;
+        const enemy = Math.random() < 0.6 ? new Chicken(spawnX) : new SmallChicken(spawnX);
+        enemy.sounds = this.character.sounds;
+        this.enemies.push(enemy);
     }
 
     checkCollisions() {
         this.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
+                this.character.hit(enemy.contactDamage);
                 this.statusbar[0].setPercentage(this.character.energy);
                 this.hit = true;
                 setTimeout(() => {
@@ -113,7 +157,7 @@ class World {
         this.throwableObjects[bottleIndex].splash();
         if (enemy.isDead()) {
             enemy.speed = 0;
-            if (!(enemy instanceof Endboss)) {  
+            if (!(enemy instanceof Endboss)) {
                 setTimeout(() => {
                     this.removeEnemy(this.enemies.indexOf(enemy));
                 }, 1000);
@@ -134,7 +178,7 @@ class World {
 
 
     draw() {
-        if (this.character.isDead()) {
+        if (this.character.isDead() && this.character.deathAnimationComplete) {
             return;
         }
 
@@ -197,29 +241,32 @@ class World {
             if (this.character.isColliding(enemy)) {
                 const characterCenterY = this.character.y + this.character.height / 2;
                 const enemyCenterY = enemy.y + enemy.height / 2;
-
                 const verticalDistance = enemyCenterY - characterCenterY;
                 const threshold = 20;
-                if (verticalDistance > threshold && this.character.speedY < 0 && this.character.isAboveGround()) {
-                    // Vertikale Kollision
+
+                const isVerticalAttack = verticalDistance > threshold &&
+                    this.character.speedY < 0 &&
+                    this.character.isAboveGround();
+
+                if (isVerticalAttack) {
+                    // Vertikale Kollision 
                     enemy.hit();
                     if (enemy.isDead()) {
                         enemy.speed = 0;
-                        if (!(enemy instanceof Endboss)) { 
+                        if (!(enemy instanceof Endboss)) {
                             setTimeout(() => {
                                 this.removeEnemy(index);
                             }, 500);
                         }
                     }
                     this.character.jump();
-                } else if (!enemy.isDead()) {
-                    // Horizontale Kollision 
-                    this.character.hit();
+                } else if (!enemy.isDead() && !this.character.isHit()) {
+                    // Horizontale Kollision
+                    const now = new Date().getTime();
+                    const timeSinceLastHit = now - this.character.lastHit;
+                    console.log(` Zeit seit letztem Hit: ${timeSinceLastHit}ms`);
+                    this.character.hit(enemy.contactDamage);
                     this.statusbar[0].setPercentage(this.character.energy);
-                    this.hit = true;
-                    setTimeout(() => {
-                        this.hit = false;
-                    }, 500);
                 }
             }
         });

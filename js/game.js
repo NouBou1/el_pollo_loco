@@ -4,6 +4,7 @@ let keyboard = new Keyboard();
 let gameStarted = false;
 let gameOverImage;
 let winImage;
+let soundManager = new SoundManager();
 
 function init() {
     canvas = document.getElementById("game-canvas");
@@ -11,6 +12,7 @@ function init() {
     showStartScreen();
     setupMobileControls();
     canvasTapToStart();
+    soundManager.playBackgroundMusic();
 }
 
 function canvasTapToStart() {
@@ -62,7 +64,7 @@ function showStartScreen() {
 
 function startGame() {
     gameStarted = true;
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, soundManager);
     checkGameState();
 }
 
@@ -70,8 +72,9 @@ function checkGameState() {
     setInterval(() => {
         if (!world || !gameStarted) return;
 
-        if (world.character.isDead()) {
-            showGameOver();
+        if (world.character.isDead() && world.character.deathAnimationComplete) {
+                showGameOver();
+            
         } else if (isEndbossDefeated()) {
             showWin();
         }
@@ -84,16 +87,24 @@ function isEndbossDefeated() {
 }
 
 
+function endGame() {
+    world.character.gameEnded = true;
+    world.character.sounds.stopAllSounds();
+}
+
 function showGameOver() {
     gameStarted = false;
+    endGame();
+    world.character.sounds.playGameOverSound();
     let ctx = canvas.getContext('2d');
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
 }
 
 function showWin() {
     gameStarted = false;
+    endGame();
+    world.character.sounds.playVictorySound();
     let ctx = canvas.getContext('2d');
-
     let scale = 0.7;
     let imgWidth = canvas.width * scale;
     let imgHeight = (winImage.height / winImage.width) * imgWidth;
@@ -104,22 +115,36 @@ function showWin() {
 }
 
 function restartGame() {
-    location.reload();  
+    location.reload();
 }
 
 function toggleLegend() {
     const legend = document.getElementById('controls-legend');
-    const button = document.getElementById('toggle-legend-btn');
-    
-    legend.classList.toggle('hidden');
-    
-  
     if (legend.classList.contains('hidden')) {
-        button.textContent = 'Steuerung anzeigen';
+        showLegend();
     } else {
-        button.textContent = '✖ Steuerung ausblenden';
+        hideLegend();
     }
 }
+
+function showLegend() {
+    document.getElementById('controls-legend').classList.remove('hidden');
+    document.getElementById('toggle-legend-btn').textContent = '✖ Steuerung ausblenden';
+}
+
+function hideLegend() {
+    document.getElementById('controls-legend').classList.add('hidden');
+    document.getElementById('toggle-legend-btn').textContent = 'Steuerung anzeigen';
+}
+
+document.addEventListener('click', (e) => {
+    const legend = document.getElementById('controls-legend');
+    const toggleButton = document.getElementById('toggle-legend-btn');
+    if (legend.classList.contains('hidden') || legend.contains(e.target) || toggleButton.contains(e.target)) {
+        return;
+    }
+    hideLegend();
+});
 
 window.addEventListener("keydown", (e) => {
     if (e.keyCode === 32) {
