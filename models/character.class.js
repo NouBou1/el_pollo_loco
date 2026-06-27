@@ -73,6 +73,7 @@ class Character extends MovableObject {
     deathSoundPlayed = false;
     lastMovement = Date.now();
     sounds;
+    gameEnded = false;
 
     constructor() {
         super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');
@@ -121,6 +122,9 @@ class Character extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.gameEnded) {
+                return;
+            }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 if (!this.deathSoundPlayed) {
@@ -174,6 +178,7 @@ class Character extends MovableObject {
             this.bottles--;
             this.world.bottleStatusbar.setAmount(this.bottles);
             this.sounds.playThrowSound();
+            this.lastMovement = Date.now();
         }
     }
 

@@ -17,6 +17,10 @@ class World {
     hit = false;
     bottleStatusbar = new BottleStatusbar();
     coinStatusbar = new CoinStatusbar();
+    spawnDistance = 30;      // Minimaler Abstand zwischen Gegner-Spawns in Pixeln
+    nextSpawnX = 0;          // X-Position, ab der der nächste Gegner gespawnt wird
+    maxChickens = 30;        // Maximale Anzahl gleichzeitig aktiver Hühner 
+    spawnLimitX = 2400;      // Gegner spawnen bis zu dieser X-Position (vor dem Endboss)
 
 
     repeatBackground() {
@@ -68,7 +72,38 @@ class World {
             this.checkCollisionsCoin();
             this.checkBottleEnemyCollisions();
             this.removeCompletedSplashes();
+            this.spawnEnemies();
         }, 1000 / 60);
+    }
+
+    spawnEnemies() {
+        if (!this.canSpawnEnemy()) {
+            return;
+        }
+        this.scheduleNextSpawn();
+        this.spawnChicken();
+    }
+
+    canSpawnEnemy() {
+        const beforeLimit = this.character.x < this.spawnLimitX;
+        const timeForNext = this.character.x >= this.nextSpawnX;
+        const belowMax = this.countActiveChickens() < this.maxChickens;
+        return beforeLimit && timeForNext && belowMax;
+    }
+
+    scheduleNextSpawn() {
+        this.nextSpawnX = this.character.x + this.spawnDistance + Math.random() * 200;
+    }
+
+    countActiveChickens() {
+        return this.enemies.filter(enemy => !(enemy instanceof Endboss) && !enemy.isDead()).length;
+    }
+
+    spawnChicken() {
+        const spawnX = this.character.x + this.canvas.width + 100 + Math.random() * 200;
+        const enemy = Math.random() < 0.6 ? new Chicken(spawnX) : new SmallChicken(spawnX);
+        enemy.sounds = this.character.sounds;
+        this.enemies.push(enemy);
     }
 
     checkCollisions() {

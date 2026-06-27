@@ -131,7 +131,7 @@ class SoundManager {
 
     playBackgroundMusic() {
         if (this.background_music.paused) {
-            this.background_music.play();
+            this.background_music.play().catch(() => {});
         }
     }
 
@@ -156,9 +156,7 @@ class SoundManager {
         this.pauseWalkingSound();
         this.pauseSnoringSound();
         this.pauseChickenWalkingSound();
-        this.pauseBackgroundMusic();
 
-       
         this.jumping_sound.pause();
         this.jumping_sound.currentTime = 0;
 

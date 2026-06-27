@@ -55,26 +55,49 @@
 
 
     <section id="controls-legend" class="legend hidden">
+        <button id="close-legend-btn" class="close-legend-btn" onclick="hideLegend()" aria-label="Steuerung schließen">✖</button>
         <h2> Steuerung</h2>
-        <dl class="controls-list">
-            <dt><kbd>←</kbd></dt>
-            <dd>Nach links bewegen</dd>
+        <div class="legend-columns">
+            <div class="legend-column">
+                <h3>Tastatur</h3>
+                <dl class="controls-list">
+                    <dt><kbd>←</kbd></dt>
+                    <dd>Nach links bewegen</dd>
 
-            <dt><kbd>→</kbd></dt>
-            <dd>Nach rechts bewegen</dd>
+                    <dt><kbd>→</kbd></dt>
+                    <dd>Nach rechts bewegen</dd>
 
-            <dt><kbd>↑</kbd></dt>
-            <dd>Springen</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Springen</dd>
 
-            <dt><kbd>Space</kbd></dt>
-            <dd>Springen</dd>
+                    <dt><kbd>Space</kbd></dt>
+                    <dd>Springen</dd>
 
-            <dt><kbd>D</kbd></dt>
-            <dd>Flasche werfen</dd>
+                    <dt><kbd>D</kbd></dt>
+                    <dd>Flasche werfen</dd>
 
-            <dt><kbd>Enter</kbd></dt>
-            <dd>Spiel starten/neustarten</dd>
-        </dl>
+                    <dt><kbd>Enter</kbd></dt>
+                    <dd>Spiel starten/neustarten</dd>
+                </dl>
+            </div>
+
+            <div class="legend-column">
+                <h3>Mobile Steuerung</h3>
+                <dl class="controls-list">
+                    <dt><kbd>◄</kbd></dt>
+                    <dd>Nach links bewegen</dd>
+
+                    <dt><kbd>►</kbd></dt>
+                    <dd>Nach rechts bewegen</dd>
+
+                    <dt><kbd>▲</kbd></dt>
+                    <dd>Springen</dd>
+
+                    <dt><kbd>●</kbd></dt>
+                    <dd>Flasche werfen</dd>
+                </dl>
+            </div>
+        </div>
     </section>
 </body>
 

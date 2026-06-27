@@ -86,9 +86,14 @@ function isEndbossDefeated() {
 }
 
 
+function endGame() {
+    world.character.gameEnded = true;
+    world.character.sounds.stopAllSounds();
+}
+
 function showGameOver() {
     gameStarted = false;
-    world.character.sounds.stopAllSounds();
+    endGame();
     world.character.sounds.playGameOverSound();
     let ctx = canvas.getContext('2d');
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
@@ -96,7 +101,7 @@ function showGameOver() {
 
 function showWin() {
     gameStarted = false;
-    world.character.sounds.stopAllSounds();
+    endGame();
     world.character.sounds.playVictorySound();
     let ctx = canvas.getContext('2d');
     let scale = 0.7;
@@ -114,17 +119,31 @@ function restartGame() {
 
 function toggleLegend() {
     const legend = document.getElementById('controls-legend');
-    const button = document.getElementById('toggle-legend-btn');
-
-    legend.classList.toggle('hidden');
-
-
     if (legend.classList.contains('hidden')) {
-        button.textContent = 'Steuerung anzeigen';
+        showLegend();
     } else {
-        button.textContent = '✖ Steuerung ausblenden';
+        hideLegend();
     }
 }
+
+function showLegend() {
+    document.getElementById('controls-legend').classList.remove('hidden');
+    document.getElementById('toggle-legend-btn').textContent = '✖ Steuerung ausblenden';
+}
+
+function hideLegend() {
+    document.getElementById('controls-legend').classList.add('hidden');
+    document.getElementById('toggle-legend-btn').textContent = 'Steuerung anzeigen';
+}
+
+document.addEventListener('click', (e) => {
+    const legend = document.getElementById('controls-legend');
+    const toggleButton = document.getElementById('toggle-legend-btn');
+    if (legend.classList.contains('hidden') || legend.contains(e.target) || toggleButton.contains(e.target)) {
+        return;
+    }
+    hideLegend();
+});
 
 window.addEventListener("keydown", (e) => {
     if (e.keyCode === 32) {
