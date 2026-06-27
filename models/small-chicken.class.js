@@ -2,6 +2,12 @@ class SmallChicken extends MovableObject {
     height = 50;
     width = 50;
     y = 380;
+    offset = {
+        top: 5,
+        left: 5,
+        right: 5,
+        bottom: 5
+    };
     groundY = 380;
     energy = 1;
     contactDamage = 1;

@@ -32,15 +32,30 @@ class DrawableObject {
     }
 
 
+    // drawCollisionFrame(ctx) {
+    //     if (this instanceof Character || this instanceof Chicken || this instanceof SmallChicken || this instanceof Endboss || this instanceof Endboss)  {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '5';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.rect(this.x, this.y, this.width, this.height);
+    //         ctx.stroke();
+    //     }
+    // }
+
     drawCollisionFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof SmallChicken) {
+        if (this instanceof Character || this instanceof Chicken || this instanceof SmallChicken || this instanceof Endboss) {
+            const offset = this.offset || { top: 0, left: 0, right: 0, bottom: 0 };
             ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'red';  // Rot für bessere Sichtbarkeit
+            ctx.rect(
+                this.x + offset.left,
+                this.y + offset.top,
+                this.width - offset.left - offset.right,
+                this.height - offset.top - offset.bottom
+            );
             ctx.stroke();
         }
     }
-
 
 }

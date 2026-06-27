@@ -5,10 +5,10 @@
     font-style: normal;
 }
 
-body{
-    display: flex; 
+body {
+    display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     height: 98dvh;
     width: 99dvw;
@@ -26,9 +26,9 @@ h1 {
     letter-spacing: 2px;
 }
 
-canvas{
+canvas {
     background-color: black;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border: 4px solid #8B4513;
     border-radius: 15px;
     width: 100%;
@@ -209,6 +209,20 @@ kbd {
     text-align: center;
     border: 3px solid #8B4513;
     font-family: 'Danfo', serif;
+}
+
+fieldset.mobile-controls-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: inset(50%);
 }
 
 @media (max-width: 600px) {

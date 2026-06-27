@@ -5,6 +5,12 @@ class Endboss extends MovableObject {
     width = 400;
     speed = 2;
     energy = 20;
+    offset = {
+        top: 100,
+        left: 50,
+        right: 50,
+        bottom: 50
+    };
     targetX = 2900;
     triggerX = 2000;
     triggered = false;
@@ -12,8 +18,8 @@ class Endboss extends MovableObject {
     isAttacking = false;
     attackImageIndex = 0;
     lastAttack = 0;
-    attackCooldown = 3000;
-    attackRange = 100;
+    attackCooldown = 2500;
+    attackRange = 150;
     deathAnimationComplete = false;
     deathAnimationIndex = 0;
     deathSoundPlayed = false;

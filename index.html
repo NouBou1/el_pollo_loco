@@ -37,28 +37,29 @@
 
     </canvas>
 
-    <div id="mobile-controls" class="mobile-controls">
-        <div class="mobile-controls-group">
+    <nav id="mobile-controls" class="mobile-controls" aria-label="Mobile Spielsteuerung">
+        <fieldset class="mobile-controls-group">
+            <legend class="visually-hidden">Bewegung</legend>
             <button id="btn-left" class="control-btn" aria-label="Nach links">◄</button>
             <button id="btn-right" class="control-btn" aria-label="Nach rechts">►</button>
-        </div>
-        <div class="mobile-controls-group">
+        </fieldset>
+        <fieldset class="mobile-controls-group">
+            <legend class="visually-hidden">Aktionen</legend>
             <button id="btn-throw" class="control-btn" aria-label="Flasche werfen">●</button>
             <button id="btn-jump" class="control-btn" aria-label="Springen">▲</button>
-        </div>
-    </div>
+        </fieldset>
+    </nav>
 
     <button id="toggle-legend-btn" onclick="toggleLegend()">
         Steuerung anzeigen
     </button>
 
-
-
     <section id="controls-legend" class="legend hidden">
-        <button id="close-legend-btn" class="close-legend-btn" onclick="hideLegend()" aria-label="Steuerung schließen">✖</button>
+        <button id="close-legend-btn" class="close-legend-btn" onclick="hideLegend()"
+            aria-label="Steuerung schließen">✖</button>
         <h2> Steuerung</h2>
-        <div class="legend-columns">
-            <div class="legend-column">
+        <section class="legend-columns">
+            <article class="legend-column">
                 <h3>Tastatur</h3>
                 <dl class="controls-list">
                     <dt><kbd>←</kbd></dt>
@@ -79,9 +80,9 @@
                     <dt><kbd>Enter</kbd></dt>
                     <dd>Spiel starten/neustarten</dd>
                 </dl>
-            </div>
+            </article>
 
-            <div class="legend-column">
+            <article class="legend-column">
                 <h3>Mobile Steuerung</h3>
                 <dl class="controls-list">
                     <dt><kbd>◄</kbd></dt>
@@ -95,9 +96,12 @@
 
                     <dt><kbd>●</kbd></dt>
                     <dd>Flasche werfen</dd>
+                    
+                    <dt><kbd>👆</kbd></dt> 
+                    <dd>Spiel starten/neustarten (Tap auf Bildschirm)</dd>
                 </dl>
-            </div>
-        </div>
+            </article>
+        </section>
     </section>
 </body>
 

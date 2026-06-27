@@ -3,7 +3,14 @@ class Character extends MovableObject {
     y = 180;
     height = 250;
     width = 100;
-    speed = 3.5;
+    speed = 3;
+
+    offset = {
+        top: 100,      
+        left: 20,      
+        right: 20,
+        bottom: 5      
+    };
     IMAGES_WALKING = [
         'assets/img/2_character_pepe/2_walk/W-21.png',
         'assets/img/2_character_pepe/2_walk/W-22.png',
@@ -74,6 +81,7 @@ class Character extends MovableObject {
     lastMovement = Date.now();
     sounds;
     gameEnded = false;
+
 
     constructor() {
         super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');
