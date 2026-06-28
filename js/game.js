@@ -32,14 +32,26 @@ function setupMobileControls() {
 
 function bindControlButton(buttonId, keyboardKey) {
     const button = document.getElementById(buttonId);
-    const press = (e) => {
+    const press = createPressHandler(keyboardKey);
+    const release = createReleaseHandler(keyboardKey);
+    attachPointerEvents(button, press, release);
+}
+
+function createPressHandler(keyboardKey) {
+    return (e) => {
         e.preventDefault();
         keyboard[keyboardKey] = true;
     };
-    const release = (e) => {
+}
+
+function createReleaseHandler(keyboardKey) {
+    return (e) => {
         e.preventDefault();
         keyboard[keyboardKey] = false;
     };
+}
+
+function attachPointerEvents(button, press, release) {
     button.addEventListener('pointerdown', press);
     button.addEventListener('pointerup', release);
     button.addEventListener('pointerleave', release);
@@ -146,48 +158,31 @@ document.addEventListener('click', (e) => {
     hideLegend();
 });
 
-window.addEventListener("keydown", (e) => {
-    if (e.keyCode === 32) {
-        keyboard.SPACE = true;
-    }
-    if (e.keyCode === 39) {
-        keyboard.RIGHT = true;
-    }
-    if (e.keyCode === 37) {
-        keyboard.LEFT = true;
-    }
-    if (e.keyCode === 38) {
-        keyboard.SPACE = true;
-    }
-    if (e.keyCode === 40) {
-        keyboard.DOWN = true;
-    }
-    if (e.keyCode === 68) {
-        keyboard.D = true;
-    }
-});
+const KEY_MAPPINGS = {
+    32: 'SPACE',  
+    37: 'LEFT',  
+    38: 'SPACE',   
+    39: 'RIGHT',   
+    40: 'DOWN',    
+    68: 'D'        
+};
 
+function handleKeyDown(e) {
+    const keyAction = KEY_MAPPINGS[e.keyCode];
+    if (keyAction) {
+        keyboard[keyAction] = true;
+    }
+}
 
-window.addEventListener("keyup", (e) => {
-    if (e.keyCode === 39) {
-        keyboard.RIGHT = false;
+function handleKeyUp(e) {
+    const keyAction = KEY_MAPPINGS[e.keyCode];
+    if (keyAction) {
+        keyboard[keyAction] = false;
     }
-    if (e.keyCode === 37) {
-        keyboard.LEFT = false;
-    }
-    if (e.keyCode === 38) {
-        keyboard.SPACE = false;
-    }
-    if (e.keyCode === 40) {
-        keyboard.DOWN = false;
-    }
-    if (e.keyCode === 32) {
-        keyboard.SPACE = false;
-    }
-    if (e.keyCode === 68) {
-        keyboard.D = false;
-    }
-});
+}
+
+window.addEventListener("keydown", handleKeyDown);
+window.addEventListener("keyup", handleKeyUp);
 
 document.addEventListener('keydown', (e) => {
     if (!gameStarted && e.keyCode === 13) {
