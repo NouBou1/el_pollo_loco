@@ -103,44 +103,8 @@ class Character extends MovableObject {
             this.handleActions();
         }, 1000 / 60);
 
-   
         setInterval(() => {
-            if (this.isDead()) {
-                console.log('Character is DEAD! Energy:', this.energy, 'deathAnimationIndex:', this.deathAnimationIndex);
-                this.playDeathAnimation();
-                return;
-            }
-            if (this.gameEnded) {
-                return;
-            }
-            else if (this.isHit()) {
-                this.playAnimation(this.IMAGES_HURT);
-                if (this.hurtSoundLastHit !== this.lastHit) {
-                    this.sounds.playHurtSound();
-                    this.hurtSoundLastHit = this.lastHit;
-                }
-                this.sounds.pauseWalkingSound();
-                this.sounds.pauseSnoringSound();
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-                this.sounds.pauseWalkingSound();
-                this.sounds.pauseSnoringSound();
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING);
-                this.sounds.playWalkingSound();
-                this.sounds.pauseSnoringSound();
-            }
-            else {
-                let idleTime = Date.now() - this.lastMovement;
-                if (idleTime > 10000) {
-                    this.playAnimation(this.IMAGES_LONG_IDLE);
-                    this.sounds.playSnoringSound();
-                } else {
-                    this.playAnimation(this.IMAGES_IDLE);
-                    this.sounds.pauseSnoringSound();
-                }
-                this.sounds.pauseWalkingSound();
-            }
+            this.handleAnimations();
         }, 100);
     }
 
@@ -177,6 +141,60 @@ class Character extends MovableObject {
                 this.lastThrow = currentTime;
             }
         }
+    }
+
+    handleAnimations() {
+        if (this.isDead()) {
+            console.log('Character is DEAD! Energy:', this.energy, 'deathAnimationIndex:', this.deathAnimationIndex);
+            this.playDeathAnimation();
+            return;
+        }
+        if (this.gameEnded) {
+            return;
+        }
+        if (this.isHit()) {
+            this.playHurtAnimation();
+        } else if (this.isAboveGround()) {
+            this.playJumpAnimation();
+        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.playWalkAnimation();
+        } else {
+            this.playIdleAnimation();
+        }
+    }
+
+    playHurtAnimation() {
+        this.playAnimation(this.IMAGES_HURT);
+        if (this.hurtSoundLastHit !== this.lastHit) {
+            this.sounds.playHurtSound();
+            this.hurtSoundLastHit = this.lastHit;
+        }
+        this.sounds.pauseWalkingSound();
+        this.sounds.pauseSnoringSound();
+    }
+
+    playJumpAnimation() {
+        this.playAnimation(this.IMAGES_JUMPING);
+        this.sounds.pauseWalkingSound();
+        this.sounds.pauseSnoringSound();
+    }
+
+    playWalkAnimation() {
+        this.playAnimation(this.IMAGES_WALKING);
+        this.sounds.playWalkingSound();
+        this.sounds.pauseSnoringSound();
+    }
+
+    playIdleAnimation() {
+        let idleTime = Date.now() - this.lastMovement;
+        if (idleTime > 10000) {
+            this.playAnimation(this.IMAGES_LONG_IDLE);
+            this.sounds.playSnoringSound();
+        } else {
+            this.playAnimation(this.IMAGES_IDLE);
+            this.sounds.pauseSnoringSound();
+        }
+        this.sounds.pauseWalkingSound();
     }
 
     moveRight() {
