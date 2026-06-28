@@ -144,39 +144,58 @@ class Character extends MovableObject {
     }
 
     handleAnimations() {
+        if (this.shouldSkipAnimation()) {
+            return;
+        }
+        this.selectAndPlayAnimation();
+    }
+
+    shouldSkipAnimation() {
         if (this.isDead()) {
             console.log('Character is DEAD! Energy:', this.energy, 'deathAnimationIndex:', this.deathAnimationIndex);
             this.playDeathAnimation();
-            return;
+            return true;
         }
-        if (this.gameEnded) {
-            return;
-        }
+        return this.gameEnded;
+    }
+
+    selectAndPlayAnimation() {
         if (this.isHit()) {
             this.playHurtAnimation();
         } else if (this.isAboveGround()) {
             this.playJumpAnimation();
-        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        } else if (this.isMoving()) {
             this.playWalkAnimation();
         } else {
             this.playIdleAnimation();
         }
     }
 
+    isMoving() {
+        return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+    }
+
     playHurtAnimation() {
         this.playAnimation(this.IMAGES_HURT);
+        this.playHurtSoundIfNeeded();
+        this.stopMovementSounds();
+    }
+
+    playHurtSoundIfNeeded() {
         if (this.hurtSoundLastHit !== this.lastHit) {
             this.sounds.playHurtSound();
             this.hurtSoundLastHit = this.lastHit;
         }
+    }
+
+    stopMovementSounds() {
         this.sounds.pauseWalkingSound();
         this.sounds.pauseSnoringSound();
     }
 
     playJumpAnimation() {
         this.playAnimation(this.IMAGES_JUMPING);
-        this.sounds.pauseWalkingSound();
-        this.sounds.pauseSnoringSound();
+        this.stopMovementSounds();
     }
 
     playWalkAnimation() {
@@ -186,15 +205,27 @@ class Character extends MovableObject {
     }
 
     playIdleAnimation() {
-        let idleTime = Date.now() - this.lastMovement;
-        if (idleTime > 10000) {
-            this.playAnimation(this.IMAGES_LONG_IDLE);
-            this.sounds.playSnoringSound();
+        if (this.isLongIdle()) {
+            this.playLongIdleAnimation();
         } else {
-            this.playAnimation(this.IMAGES_IDLE);
-            this.sounds.pauseSnoringSound();
+            this.playShortIdleAnimation();
         }
         this.sounds.pauseWalkingSound();
+    }
+
+    isLongIdle() {
+        let idleTime = Date.now() - this.lastMovement;
+        return idleTime > 10000;
+    }
+
+    playLongIdleAnimation() {
+        this.playAnimation(this.IMAGES_LONG_IDLE);
+        this.sounds.playSnoringSound();
+    }
+
+    playShortIdleAnimation() {
+        this.playAnimation(this.IMAGES_IDLE);
+        this.sounds.pauseSnoringSound();
     }
 
     moveRight() {
@@ -223,13 +254,25 @@ class Character extends MovableObject {
 
     throw() {
         if (this.bottles > 0) {
-            let bottle = new ThrowableObject(this.x + 50, this.y + 100, this.otherDirection, this.sounds);
-            this.world.throwableObjects.push(bottle);
-            this.bottles--;
-            this.world.bottleStatusbar.setAmount(this.bottles);
-            this.sounds.playThrowSound();
-            this.lastMovement = Date.now();
+            this.createAndThrowBottle();
+            this.updateBottleCount();
+            this.playThrowEffects();
         }
+    }
+
+    createAndThrowBottle() {
+        let bottle = new ThrowableObject(this.x + 50, this.y + 100, this.otherDirection, this.sounds);
+        this.world.throwableObjects.push(bottle);
+    }
+
+    updateBottleCount() {
+        this.bottles--;
+        this.world.bottleStatusbar.setAmount(this.bottles);
+    }
+
+    playThrowEffects() {
+        this.sounds.playThrowSound();
+        this.lastMovement = Date.now();
     }
 
     collectBottle() {
@@ -245,13 +288,19 @@ class Character extends MovableObject {
     }
 
     playDeathAnimation() {
+        this.playDeathSoundOnce();
+        this.stopMovementSounds();
+        this.advanceDeathAnimation();
+    }
+
+    playDeathSoundOnce() {
         if (!this.deathSoundPlayed) {
             this.sounds.playDeathSound();
             this.deathSoundPlayed = true;
         }
-        this.sounds.pauseWalkingSound();
-        this.sounds.pauseSnoringSound();
+    }
 
+    advanceDeathAnimation() {
         if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
             let path = this.IMAGES_DEAD[this.deathAnimationIndex];
             this.img = this.imageCache[path];

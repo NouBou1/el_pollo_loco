@@ -39,21 +39,43 @@ class World {
     }
 
     constructor(canvas, keyboard, soundManager) {
+        this.initializeCanvas(canvas);
+        this.initializeKeyboard(keyboard);
+        this.initializeSoundManager(soundManager);
+        this.initializeEndboss();
+        this.initializeGameOverImage();
+        this.startGame();
+    }
+
+    initializeCanvas(canvas) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
+    }
+
+    initializeKeyboard(keyboard) {
         this.keyboard = keyboard;
-        this.character.world = this;
+    }
+
+    initializeSoundManager(soundManager) {
         this.character.sounds = soundManager;
         this.enemies.forEach(enemy => {
-            enemy.sounds = this.character.sounds;
+            enemy.sounds = soundManager;
         });
+    }
+
+    initializeEndboss() {
         const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss) {
             endboss.world = this;
         }
+    }
+
+    initializeGameOverImage() {
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
+    }
 
+    startGame() {
         this.character.sounds.playChickenWalkingSound();
         this.repeatBackground();
         this.draw();
@@ -187,16 +209,31 @@ class World {
 
 
     draw() {
-        if (this.character.isDead() && this.character.deathAnimationComplete) {
+        if (this.isGameOver()) {
             return;
         }
+        this.clearCanvas();
+        this.drawMovingObjects();
+        this.drawFixedObjects();
+        this.scheduleNextFrame();
+    }
 
+    isGameOver() {
+        if (this.character.isDead() && this.character.deathAnimationComplete) {
+            return true;
+        }
         const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss && endboss.deathAnimationComplete) {
-            return;
+            return true;
         }
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        return false;
+    }
 
+    clearCanvas() {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    }
+
+    drawMovingObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.backgroundObjects);
         this.addObjectsToMap(this.clouds);
@@ -205,18 +242,20 @@ class World {
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);
         this.addObjectsToMap(this.throwableObjects);
-
         this.ctx.translate(-this.camera_x, 0);
-        // ------ space for fixed objects like statusbar ------
+    }
+
+    drawFixedObjects() {
         this.addObjectsToMap(this.statusbar);
         this.addObjectsToMap([this.bottleStatusbar]);
         this.addObjectsToMap([this.coinStatusbar]);
+        const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss && endboss.triggered) {
             this.addObjectsToMap([this.endbossStatusbar]);
         }
-        this.ctx.translate(this.camera_x, 0);
+    }
 
-        this.ctx.translate(-this.camera_x, 0);
+    scheduleNextFrame() {
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -225,7 +264,6 @@ class World {
 
     addObjectsToMap(objects) {
         if (!objects) {
-            console.error('Array is undefined!');
             return;
         }
         objects.forEach(object => {
@@ -251,40 +289,48 @@ class World {
     checkJumpOnEnemy() {
         this.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
-                const characterCenterY = this.character.y + this.character.height / 2;
-                const enemyCenterY = enemy.y + enemy.height / 2;
-                const verticalDistance = enemyCenterY - characterCenterY;
-                const threshold = 20;
-
-                const isVerticalAttack = verticalDistance > threshold &&
-                    this.character.speedY < 0 &&
-                    this.character.isAboveGround();
-
-                if (isVerticalAttack) {
-                    // Vertikale Kollision
-                    enemy.hit();
-                    if (enemy instanceof Endboss) {
-                        this.updateEndbossStatusbar(enemy);
-                    }
-                    if (enemy.isDead()) {
-                        enemy.speed = 0;
-                        if (!(enemy instanceof Endboss)) {
-                            setTimeout(() => {
-                                this.removeEnemy(index);
-                            }, 500);
-                        }
-                    }
-                    this.character.jump();
+                if (this.isVerticalAttack(enemy)) {
+                    this.handleVerticalAttack(enemy, index);
                 } else if (!enemy.isDead() && !this.character.isHit()) {
-                    // Horizontale Kollision
-                    const now = new Date().getTime();
-                    const timeSinceLastHit = now - this.character.lastHit;
-                    console.log(` Zeit seit letztem Hit: ${timeSinceLastHit}ms`);
-                    this.character.hit(enemy.contactDamage);
-                    this.statusbar[0].setPercentage(this.character.energy);
+                    this.handleHorizontalCollision(enemy);
                 }
             }
         });
+    }
+
+    isVerticalAttack(enemy) {
+        const characterCenterY = this.character.y + this.character.height / 2;
+        const enemyCenterY = enemy.y + enemy.height / 2;
+        const verticalDistance = enemyCenterY - characterCenterY;
+        const threshold = 20;
+
+        return verticalDistance > threshold &&
+            this.character.speedY < 0 &&
+            this.character.isAboveGround();
+    }
+
+    handleVerticalAttack(enemy, index) {
+        enemy.hit();
+        if (enemy instanceof Endboss) {
+            this.updateEndbossStatusbar(enemy);
+        }
+        if (enemy.isDead()) {
+            enemy.speed = 0;
+            if (!(enemy instanceof Endboss)) {
+                setTimeout(() => {
+                    this.removeEnemy(index);
+                }, 500);
+            }
+        }
+        this.character.jump();
+    }
+
+    handleHorizontalCollision(enemy) {
+        const now = new Date().getTime();
+        const timeSinceLastHit = now - this.character.lastHit;
+        console.log(` Zeit seit letztem Hit: ${timeSinceLastHit}ms`);
+        this.character.hit(enemy.contactDamage);
+        this.statusbar[0].setPercentage(this.character.energy);
     }
 
 }
