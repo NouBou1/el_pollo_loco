@@ -1,3 +1,8 @@
+/**
+ * Represents the final boss enemy: a giant chicken that triggers when the
+ * character approaches, walks into position, and then attacks.
+ * @extends MovableObject
+ */
 class Endboss extends MovableObject {
     x = 3800;
     y = -30;
@@ -65,6 +70,9 @@ class Endboss extends MovableObject {
     currentImageIndex = 0;
     world;
 
+    /**
+     * Creates the endboss and starts its animation and movement loops.
+     */
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -75,23 +83,35 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the boss's animation and movement update loops.
+     */
     animate() {
         this.startAnimationLoop();
         this.startMovementLoop();
     }
 
+    /**
+     * Starts the recurring loop that updates the boss's animation state.
+     */
     startAnimationLoop() {
         setInterval(() => {
             this.updateAnimationState();
         }, 1000 / 2);
     }
 
+    /**
+     * Starts the recurring loop that moves the boss towards its target position.
+     */
     startMovementLoop() {
         setInterval(() => {
             this.moveTowardsTarget();
         }, 1000 / 60);
     }
 
+    /**
+     * Updates death, trigger, attack and animation state for the current frame.
+     */
     updateAnimationState() {
         if (this.isDead()) {
             this.playDeathAnimation();
@@ -102,12 +122,18 @@ class Endboss extends MovableObject {
         this.chooseAnimation();
     }
 
+    /**
+     * Starts an attack check if the boss is triggered, arrived, and idle.
+     */
     checkAttackCondition() {
         if (this.triggered && this.arrived && !this.isAttacking) {
             this.checkAttack();
         }
     }
 
+    /**
+     * Selects and plays the appropriate animation for the boss's current state.
+     */
     chooseAnimation() {
         if (this.isHit()) {
             this.playAnimation(this.IMAGES_HURT);
@@ -122,6 +148,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Triggers the boss and plays the alert sound once the character gets close enough.
+     */
     checkTrigger() {
         if (!this.triggered && this.world && this.world.character.x > this.triggerX) {
             this.triggered = true;
@@ -131,6 +160,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Moves the boss towards its target position until it arrives.
+     */
     moveTowardsTarget() {
         if (this.isDead() || !this.triggered || this.arrived) {
             return;
@@ -143,6 +175,10 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Calculates the horizontal gap between the boss and the character.
+     * @returns {number} Gap in pixels, or 0 if their bounding boxes overlap.
+     */
     getGapToCharacter() {
         const character = this.world.character;
         if (character.x + character.width < this.x) {
@@ -154,6 +190,9 @@ class Endboss extends MovableObject {
         return 0;
     }
 
+    /**
+     * Starts an attack if the character is in range and the cooldown has elapsed.
+     */
     checkAttack() {
         if (!this.world) {
             return;
@@ -164,6 +203,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Begins the attack animation and plays the attack sound.
+     */
     startAttack() {
         this.isAttacking = true;
         this.attackImageIndex = 0;
@@ -173,6 +215,10 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Reduces the boss's energy and plays a hit sound if available.
+     * @param {number} [damage=2] - Amount of damage to apply.
+     */
     hit(damage = 2) {
         super.hit(damage);
         if (this.sounds) {
@@ -180,6 +226,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Plays the next frame of the attack animation, dealing damage on the last frame.
+     */
     playAttackAnimation() {
         if (this.attackImageIndex < this.IMAGES_ATTACK.length) {
             this.img = this.imageCache[this.IMAGES_ATTACK[this.attackImageIndex]];
@@ -192,6 +241,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Damages the character if still within attack range when the attack lands.
+     */
     hitCharacterIfInRange() {
         const character = this.world.character;
         if (this.canHitCharacter(character)) {
@@ -200,15 +252,27 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Checks whether the character is within attack range and still alive.
+     * @param {Character} character - The character to check.
+     * @returns {boolean} True if the character can be hit.
+     */
     canHitCharacter(character) {
         return this.getGapToCharacter() < this.attackRange && !character.isDead();
     }
 
+    /**
+     * Applies attack damage to the character and updates its statusbar.
+     * @param {Character} character - The character to damage.
+     */
     damageCharacter(character) {
         character.hit(20);
         this.world.statusbar[0].setPercentage(character.energy);
     }
 
+    /**
+     * Sets a temporary world-level "hit" flag, cleared again after 500ms.
+     */
     setHitFlagTemporarily() {
         this.world.hit = true;
         setTimeout(() => {
@@ -216,6 +280,9 @@ class Endboss extends MovableObject {
         }, 500);
     }
 
+    /**
+     * Plays the boss's death animation and sound, once per death.
+     */
     playDeathAnimation() {
         if (!this.deathSoundPlayed && this.sounds) {
             this.sounds.playBossDeathSound();

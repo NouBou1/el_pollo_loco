@@ -1,3 +1,7 @@
+/**
+ * Base class for drawable objects that can move and take damage.
+ * @extends DrawableObject
+ */
 class MovableObject extends DrawableObject {
     x = 60;
     y = 300;
@@ -12,9 +16,11 @@ class MovableObject extends DrawableObject {
     contactDamage = 2;
 
 
-
-
-
+    /**
+     * Checks whether this object's bounding box overlaps another's.
+     * @param {MovableObject} mo - The other object to check against.
+     * @returns {boolean} True if the bounding boxes overlap.
+     */
     isColliding(mo) {
         return this.x + this.width > mo.x &&
             this.x < mo.x + mo.width &&
@@ -22,20 +28,33 @@ class MovableObject extends DrawableObject {
             this.y < mo.y + mo.height;
     }
 
+    /**
+     * Continuously moves the object to the left at its current speed.
+     */
     moveLeft() {
         setInterval(() => {
             this.x -= this.speed;
         }, 1000 / 60);
     }
 
+    /**
+     * Resets the object's vertical position to the ground level.
+     */
     stopJump() {
         this.y = 180;
     }
 
+    /**
+     * Stops the object's horizontal movement.
+     */
     stopMove() {
         this.speed = 0;
     }
 
+    /**
+     * Advances to the next frame of a given image sequence.
+     * @param {string[]} images - Sequence of image paths to cycle through.
+     */
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
         let path = images[i];
@@ -43,6 +62,10 @@ class MovableObject extends DrawableObject {
         this.currentImageIndex++;
     }
 
+    /**
+     * Checks whether the object is currently above ground level.
+     * @returns {boolean} True if above ground, or always true for throwable objects.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -51,6 +74,9 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Starts a recurring gravity simulation for this object.
+     */
     applyGravity() {
         setInterval(() => {
             this.updateGravityPhysics();
@@ -58,6 +84,9 @@ class MovableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
+    /**
+     * Applies one gravity step, updating vertical position and speed.
+     */
     updateGravityPhysics() {
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
@@ -65,6 +94,9 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Clamps the object to ground level once it lands, unless it's a throwable object.
+     */
     applyGroundLimit() {
         if (!(this instanceof ThrowableObject) && this.y > 180) {
             this.y = 180;
@@ -72,20 +104,32 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Checks whether the object was hit within the last 500ms.
+     * @returns {boolean} True if recently hit.
+     */
     isHit() {
         let timepassed = new Date().getTime() - this.lastHit;
         return timepassed < 500;
     }
 
+    /**
+     * Reduces the object's energy by the given damage amount.
+     * @param {number} [damage=2] - Amount of damage to apply.
+     */
     hit(damage = 2) {
-        const whoAmI = this.constructor.name; 
-        console.log(`${whoAmI} getroffen | Schaden: ${damage} | Energy: ${this.energy} → ${this.energy - damage}`);
+        const whoAmI = this.constructor.name;
         this.energy -= damage;
         if (this.energy < 0) {
             this.energy = 0;
         }
         this.lastHit = new Date().getTime();
     }
+
+    /**
+     * Checks whether the object's energy has been depleted.
+     * @returns {boolean} True if energy is zero.
+     */
     isDead() {
         return this.energy == 0;
     }

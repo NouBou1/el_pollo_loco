@@ -1,3 +1,7 @@
+/**
+ * Represents a thrown bottle that flies, can hit an enemy, and then splashes.
+ * @extends MovableObject
+ */
 class ThrowableObject extends MovableObject {
     speedY = 0;
     acceleration = 4;
@@ -25,6 +29,13 @@ class ThrowableObject extends MovableObject {
     splashAnimationComplete = false;
     sounds;
 
+    /**
+     * Creates a throwable bottle and starts its flight, gravity and animation.
+     * @param {number} x - Starting horizontal position.
+     * @param {number} y - Starting vertical position.
+     * @param {boolean} [otherDirection=false] - Throws to the left if true, right if false.
+     * @param {SoundManager} sounds - Sound manager used for break sound effects.
+     */
     constructor(x, y, otherDirection = false, sounds) {
         super().loadImage('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.x = x;
@@ -38,7 +49,9 @@ class ThrowableObject extends MovableObject {
         this.animate();
     }
 
-
+    /**
+     * Starts the bottle's horizontal flight in its throw direction.
+     */
     throw() {
         this.speedY = 20;
         const direction = this.otherDirection ? -1 : 1;
@@ -49,6 +62,10 @@ class ThrowableObject extends MovableObject {
 
     }
 
+    /**
+     * Advances to the next frame of a given image sequence.
+     * @param {string[]} images - Sequence of image paths to cycle through.
+     */
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
         let path = images[i];
@@ -56,6 +73,9 @@ class ThrowableObject extends MovableObject {
         this.currentImageIndex++;
     }
 
+    /**
+     * Starts the rotation or splash animation loop depending on hit state.
+     */
     animate() {
         setInterval(() => {
             if (this.hasHit) {
@@ -66,7 +86,9 @@ class ThrowableObject extends MovableObject {
         }, 100);
     }
 
-
+    /**
+     * Stops the bottle's flight and starts the splash animation.
+     */
     splash() {
         this.hasHit = true;
         clearInterval(this.throwInterval);
@@ -75,6 +97,9 @@ class ThrowableObject extends MovableObject {
         this.sounds.playBreakSound();
     }
 
+    /**
+     * Plays the next frame of the splash animation until complete.
+     */
     playSplashAnimation() {
         if (this.currentImageIndex < this.IMAGES_SPLASH.length) {
             let path = this.IMAGES_SPLASH[this.currentImageIndex];

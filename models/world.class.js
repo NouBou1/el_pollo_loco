@@ -1,3 +1,7 @@
+/**
+ * Owns and orchestrates the entire game world: the character, enemies,
+ * level objects, statusbars, collision checks, spawning and rendering.
+ */
 class World {
 
     character = new Character();
@@ -18,12 +22,15 @@ class World {
     bottleStatusbar = new BottleStatusbar();
     coinStatusbar = new CoinStatusbar();
     endbossStatusbar = new EndbossStatusbar();
-    spawnDistance = 30;      // Minimaler Abstand zwischen Gegner-Spawns in Pixeln
-    nextSpawnX = 0;          // X-Position, ab der der nächste Gegner gespawnt wird
-    maxChickens = 30;        // Maximale Anzahl gleichzeitig aktiver Hühner 
-    spawnLimitX = 2400;      // Gegner spawnen bis zu dieser X-Position (vor dem Endboss)
+    spawnDistance = 30;    
+    nextSpawnX = 0;          
+    maxChickens = 30;       
+    spawnLimitX = 2400;      
 
 
+    /**
+     * Fills the background with repeating, parallax-layered background objects.
+     */
     repeatBackground() {
         for (let i = 0; i < 6; i++) {
             const x = i * 718;
@@ -38,6 +45,12 @@ class World {
         }
     }
 
+    /**
+     * Creates the game world and starts it.
+     * @param {HTMLCanvasElement} canvas - Canvas element to render onto.
+     * @param {Keyboard} keyboard - Shared keyboard input state.
+     * @param {SoundManager} soundManager - Shared sound manager.
+     */
     constructor(canvas, keyboard, soundManager) {
         this.initializeCanvas(canvas);
         this.initializeKeyboard(keyboard);
@@ -47,15 +60,27 @@ class World {
         this.startGame();
     }
 
+    /**
+     * Stores the canvas and its 2D rendering context.
+     * @param {HTMLCanvasElement} canvas - Canvas element to render onto.
+     */
     initializeCanvas(canvas) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
     }
 
+    /**
+     * Stores the shared keyboard input state.
+     * @param {Keyboard} keyboard - Shared keyboard input state.
+     */
     initializeKeyboard(keyboard) {
         this.keyboard = keyboard;
     }
 
+    /**
+     * Assigns the sound manager to the character and all current enemies.
+     * @param {SoundManager} soundManager - Shared sound manager.
+     */
     initializeSoundManager(soundManager) {
         this.character.sounds = soundManager;
         this.enemies.forEach(enemy => {
@@ -63,6 +88,9 @@ class World {
         });
     }
 
+    /**
+     * Links the endboss (if present among the enemies) back to this world.
+     */
     initializeEndboss() {
         const endboss = this.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss) {
@@ -70,11 +98,17 @@ class World {
         }
     }
 
+    /**
+     * Preloads the game-over image shown when the run ends.
+     */
     initializeGameOverImage() {
         this.gameOverImage = new Image();
         this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
     }
 
+    /**
+     * Starts ambient sound, builds the background, and kicks off rendering and the game loop.
+     */
     startGame() {
         this.character.sounds.playChickenWalkingSound();
         this.repeatBackground();
@@ -84,10 +118,16 @@ class World {
         this.run();
     }
 
+    /**
+     * Gives the character a back-reference to this world.
+     */
     setWorld() {
         this.character.world = this;
     }
 
+    /**
+     * Starts the recurring game loop: collisions, cleanup and enemy spawning.
+     */
     run() {
         setInterval(() => {
             this.checkJumpOnEnemy();
@@ -99,6 +139,9 @@ class World {
         }, 1000 / 60);
     }
 
+    /**
+     * Spawns a new chicken enemy if spawn conditions allow it.
+     */
     spawnEnemies() {
         if (!this.canSpawnEnemy()) {
             return;
@@ -107,6 +150,10 @@ class World {
         this.spawnChicken();
     }
 
+    /**
+     * Checks whether a new enemy may be spawned right now.
+     * @returns {boolean} True if before the spawn limit, past the next spawn point, and under the chicken cap.
+     */
     canSpawnEnemy() {
         const beforeLimit = this.character.x < this.spawnLimitX;
         const timeForNext = this.character.x >= this.nextSpawnX;
@@ -114,14 +161,24 @@ class World {
         return beforeLimit && timeForNext && belowMax;
     }
 
+    /**
+     * Picks the character x-position at which the next enemy may spawn.
+     */
     scheduleNextSpawn() {
         this.nextSpawnX = this.character.x + this.spawnDistance + Math.random() * 200;
     }
 
+    /**
+     * Counts currently alive, non-endboss enemies.
+     * @returns {number} Number of active chickens.
+     */
     countActiveChickens() {
         return this.enemies.filter(enemy => !(enemy instanceof Endboss) && !enemy.isDead()).length;
     }
 
+    /**
+     * Spawns a new Chicken or SmallChicken ahead of the character.
+     */
     spawnChicken() {
         const spawnX = this.character.x + this.canvas.width + 100 + Math.random() * 200;
         const enemy = Math.random() < 0.6 ? new Chicken(spawnX) : new SmallChicken(spawnX);
@@ -129,6 +186,9 @@ class World {
         this.enemies.push(enemy);
     }
 
+    /**
+     * Checks for character-enemy collisions and applies contact damage.
+     */
     checkCollisions() {
         this.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
@@ -142,6 +202,9 @@ class World {
         });
     }
 
+    /**
+     * Removes bottles the character touches and updates the bottle count.
+     */
     checkCollisionsBottle() {
         this.bottles = this.bottles.filter(bottle => {
             if (this.character.isColliding(bottle)) {
@@ -153,6 +216,9 @@ class World {
         });
     }
 
+    /**
+     * Removes coins the character touches and updates the coin count.
+     */
     checkCollisionsCoin() {
         this.coins = this.coins.filter(coin => {
             if (this.character.isColliding(coin)) {
@@ -165,6 +231,9 @@ class World {
 
     }
 
+    /**
+     * Checks every thrown bottle against every enemy for a hit.
+     */
     checkBottleEnemyCollisions() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.enemies.forEach((enemy, enemyIndex) => {
@@ -175,6 +244,11 @@ class World {
         });
     }
 
+    /**
+     * Applies bottle damage to an enemy, splashes the bottle, and removes the enemy if it died.
+     * @param {MovableObject} enemy - Enemy that was hit.
+     * @param {number} bottleIndex - Index of the bottle in {@link World#throwableObjects}.
+     */
     handleBottleHit(enemy, bottleIndex) {
         enemy.hit();
         this.throwableObjects[bottleIndex].splash();
@@ -192,22 +266,35 @@ class World {
         }
     }
 
+    /**
+     * Removes an enemy from the enemies list by index.
+     * @param {number} enemyIndex - Index of the enemy to remove.
+     */
     removeEnemy(enemyIndex) {
         this.enemies.splice(enemyIndex, 1);
     }
 
+    /**
+     * Updates the endboss statusbar from its current energy ratio.
+     * @param {Endboss} endboss - The endboss whose statusbar should be updated.
+     */
     updateEndbossStatusbar(endboss) {
         const percentage = (endboss.energy / endboss.maxEnergy) * 100;
         this.endbossStatusbar.setPercentage(percentage);
     }
 
+    /**
+     * Removes thrown bottles whose splash animation has finished.
+     */
     removeCompletedSplashes() {
         this.throwableObjects = this.throwableObjects.filter(bottle =>
             !bottle.splashAnimationComplete
         );
     }
 
-
+    /**
+     * Renders one frame and schedules the next, unless the game has ended.
+     */
     draw() {
         if (this.isGameOver()) {
             return;
@@ -218,6 +305,10 @@ class World {
         this.scheduleNextFrame();
     }
 
+    /**
+     * Checks whether the run has ended via character death or endboss death.
+     * @returns {boolean} True if the game is over.
+     */
     isGameOver() {
         if (this.character.isDead() && this.character.deathAnimationComplete) {
             return true;
@@ -229,10 +320,16 @@ class World {
         return false;
     }
 
+    /**
+     * Clears the entire canvas.
+     */
     clearCanvas() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 
+    /**
+     * Draws all camera-relative (world-space) objects: background, level objects, character, enemies and bottles.
+     */
     drawMovingObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.backgroundObjects);
@@ -245,6 +342,10 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /**
+     * Draws all screen-fixed objects: health, bottle and coin statusbars,
+     * plus the endboss statusbar once the boss has been triggered.
+     */
     drawFixedObjects() {
         this.addObjectsToMap(this.statusbar);
         this.addObjectsToMap([this.bottleStatusbar]);
@@ -255,6 +356,9 @@ class World {
         }
     }
 
+    /**
+     * Schedules the next call to {@link World#draw} via requestAnimationFrame.
+     */
     scheduleNextFrame() {
         let self = this;
         requestAnimationFrame(function () {
@@ -262,6 +366,10 @@ class World {
         });
     }
 
+    /**
+     * Draws a collection of drawable objects onto the canvas.
+     * @param {DrawableObject[]} objects - Objects to draw, may be undefined/empty.
+     */
     addObjectsToMap(objects) {
         if (!objects) {
             return;
@@ -271,6 +379,10 @@ class World {
         });
     }
 
+    /**
+     * Draws a single object, mirroring it horizontally if facing the other direction.
+     * @param {DrawableObject} movableObject - Object to draw.
+     */
     addToMap(movableObject) {
         if (movableObject.otherDirection) {
             this.ctx.save();
@@ -279,13 +391,17 @@ class World {
             this.ctx.translate(-movableObject.x - movableObject.width / 2, 0);
         }
         movableObject.draw(this.ctx);
-        movableObject.drawCollisionFrame(this.ctx);
+        // movableObject.drawCollisionFrame(this.ctx);
 
         if (movableObject.otherDirection) {
             this.ctx.restore();
         }
     }
 
+    /**
+     * Checks character-enemy collisions and routes them to a vertical (jump)
+     * or horizontal (contact damage) handler.
+     */
     checkJumpOnEnemy() {
         this.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
@@ -298,6 +414,11 @@ class World {
         });
     }
 
+    /**
+     * Checks whether the character is jumping down onto the given enemy.
+     * @param {MovableObject} enemy - Enemy to check against.
+     * @returns {boolean} True if this counts as a stomp/jump attack.
+     */
     isVerticalAttack(enemy) {
         const characterCenterY = this.character.y + this.character.height / 2;
         const enemyCenterY = enemy.y + enemy.height / 2;
@@ -309,6 +430,11 @@ class World {
             this.character.isAboveGround();
     }
 
+    /**
+     * Applies jump-attack damage to an enemy, removes it if dead, and bounces the character.
+     * @param {MovableObject} enemy - Enemy that was jumped on.
+     * @param {number} index - Index of the enemy in {@link World#enemies}.
+     */
     handleVerticalAttack(enemy, index) {
         enemy.hit();
         if (enemy instanceof Endboss) {
@@ -325,10 +451,13 @@ class World {
         this.character.jump();
     }
 
+    /**
+     * Applies contact damage to the character from a side collision with an enemy.
+     * @param {MovableObject} enemy - Enemy the character collided with.
+     */
     handleHorizontalCollision(enemy) {
         const now = new Date().getTime();
         const timeSinceLastHit = now - this.character.lastHit;
-        console.log(` Zeit seit letztem Hit: ${timeSinceLastHit}ms`);
         this.character.hit(enemy.contactDamage);
         this.statusbar[0].setPercentage(this.character.energy);
     }
