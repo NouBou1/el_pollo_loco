@@ -76,31 +76,50 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.isDead()) {
-                this.playDeathAnimation();
-                return;
-            }
-            this.checkTrigger();
-            if (this.triggered && this.arrived && !this.isAttacking) {
-                this.checkAttack();
-            }
-            if (this.isHit()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isAttacking) {
-                this.playAttackAnimation();
-            } else if (this.triggered && this.arrived) {
-                this.playAnimation(this.IMAGES_ALERT);
-            } else if (this.triggered) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else {
-                this.playAnimation(this.IMAGES_ALERT);
-            }
-        }, 1000 / 2);
+        this.startAnimationLoop();
+        this.startMovementLoop();
+    }
 
+    startAnimationLoop() {
+        setInterval(() => {
+            this.updateAnimationState();
+        }, 1000 / 2);
+    }
+
+    startMovementLoop() {
         setInterval(() => {
             this.moveTowardsTarget();
         }, 1000 / 60);
+    }
+
+    updateAnimationState() {
+        if (this.isDead()) {
+            this.playDeathAnimation();
+            return;
+        }
+        this.checkTrigger();
+        this.checkAttackCondition();
+        this.chooseAnimation();
+    }
+
+    checkAttackCondition() {
+        if (this.triggered && this.arrived && !this.isAttacking) {
+            this.checkAttack();
+        }
+    }
+
+    chooseAnimation() {
+        if (this.isHit()) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else if (this.isAttacking) {
+            this.playAttackAnimation();
+        } else if (this.triggered && this.arrived) {
+            this.playAnimation(this.IMAGES_ALERT);
+        } else if (this.triggered) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.playAnimation(this.IMAGES_ALERT);
+        }
     }
 
     checkTrigger() {
@@ -175,14 +194,26 @@ class Endboss extends MovableObject {
 
     hitCharacterIfInRange() {
         const character = this.world.character;
-        if (this.getGapToCharacter() < this.attackRange && !character.isDead()) {
-            character.hit(20);
-            this.world.statusbar[0].setPercentage(character.energy);
-            this.world.hit = true;
-            setTimeout(() => {
-                this.world.hit = false;
-            }, 500);
+        if (this.canHitCharacter(character)) {
+            this.damageCharacter(character);
+            this.setHitFlagTemporarily();
         }
+    }
+
+    canHitCharacter(character) {
+        return this.getGapToCharacter() < this.attackRange && !character.isDead();
+    }
+
+    damageCharacter(character) {
+        character.hit(20);
+        this.world.statusbar[0].setPercentage(character.energy);
+    }
+
+    setHitFlagTemporarily() {
+        this.world.hit = true;
+        setTimeout(() => {
+            this.world.hit = false;
+        }, 500);
     }
 
     playDeathAnimation() {
