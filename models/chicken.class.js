@@ -1,3 +1,7 @@
+/**
+ * Represents a normal walking chicken enemy.
+ * @extends MovableObject
+ */
 class Chicken extends MovableObject {
     height = 60;
     width = 60;
@@ -22,6 +26,10 @@ class Chicken extends MovableObject {
 
 
 
+    /**
+     * Creates a chicken at a given or random horizontal position.
+     * @param {number} [x] - Horizontal position; random position if omitted.
+     */
     constructor(x = 800 + Math.random() * 3000) {
         super().loadImage('assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
 
@@ -32,7 +40,9 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
-
+    /**
+     * Starts the chicken's leftward movement and walking/dead animation loop.
+     */
     animate() {
         this.moveLeft();
         setInterval(() => {
@@ -44,6 +54,10 @@ class Chicken extends MovableObject {
         }, 100);
     }
 
+    /**
+     * Reduces the chicken's energy and plays a hurt sound if available.
+     * @param {number} [damage=2] - Amount of damage to apply.
+     */
     hit(damage = 2) {
         super.hit(damage);
         if (this.sounds) {

@@ -1,3 +1,7 @@
+/**
+ * Represents a small chicken enemy that periodically jumps.
+ * @extends MovableObject
+ */
 class SmallChicken extends MovableObject {
     height = 50;
     width = 50;
@@ -26,6 +30,11 @@ class SmallChicken extends MovableObject {
 
 
 
+    /**
+     * Creates a small chicken at a given or random horizontal position
+     * and starts its movement, gravity and jump scheduling.
+     * @param {number} [x] - Horizontal position; random position if omitted.
+     */
     constructor(x = 800 + Math.random() * 3000) {
         super().loadImage('assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
 
@@ -38,7 +47,9 @@ class SmallChicken extends MovableObject {
         this.scheduleNextJump();
     }
 
-
+    /**
+     * Starts the chicken's leftward movement and walking/dead animation loop.
+     */
     animate() {
         this.moveLeft();
         setInterval(() => {
@@ -50,6 +61,9 @@ class SmallChicken extends MovableObject {
         }, 100);
     }
 
+    /**
+     * Triggers a jump if the chicken is alive and not already jumping.
+     */
     jump() {
         if (this.isDead() || this.isJumping) {
             return;
@@ -58,6 +72,9 @@ class SmallChicken extends MovableObject {
         this.speedY = 25;
     }
 
+    /**
+     * Starts a recurring gravity simulation applied while the chicken is jumping.
+     */
     applyChickenGravity() {
         setInterval(() => {
             if (this.isJumping) {
@@ -72,6 +89,9 @@ class SmallChicken extends MovableObject {
         }, 1000 / 25);
     }
 
+    /**
+     * Schedules the chicken's next jump after a random delay, then reschedules itself.
+     */
     scheduleNextJump() {
         const delay = 2000 + Math.random() * 3000;
         setTimeout(() => {
@@ -80,6 +100,10 @@ class SmallChicken extends MovableObject {
         }, delay);
     }
 
+    /**
+     * Reduces the chicken's energy and plays a hurt sound if available.
+     * @param {number} [damage=2] - Amount of damage to apply.
+     */
     hit(damage = 2) {
         super.hit(damage);
         if (this.sounds) {
