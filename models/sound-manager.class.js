@@ -24,6 +24,8 @@ class SoundManager {
     game_over_sound = new Audio('assets/sounds/game/gamesound-game-over.mp3');
     victory_sound = new Audio('assets/sounds/game/gamesound-victory.mp3');
 
+    isMuted = false;
+
     /**
      * Configures looping and default volumes for ambient/looping sounds.
      */
@@ -178,6 +180,31 @@ class SoundManager {
     playVictorySound() {
         this.victory_sound.currentTime = 0;
         this.victory_sound.play();
+    }
+
+    /**
+     * Lists every Audio object managed by this class.
+     * @returns {HTMLAudioElement[]} All managed sounds.
+     */
+    getAllSounds() {
+        return [
+            this.walking_sound, this.jumping_sound, this.hurt_sound, this.death_sound,
+            this.collect_bottle_sound, this.collect_coin_sound, this.break_sound,
+            this.throw_sound, this.snoring_sound, this.chicken_walking_sound,
+            this.chicken_hurt_sound, this.boss_alert_sound, this.boss_attack_sound,
+            this.boss_hit_sound, this.boss_death_sound, this.background_music,
+            this.game_over_sound, this.victory_sound
+        ];
+    }
+
+    /**
+     * Toggles the muted state of every managed sound.
+     * @returns {boolean} The new muted state.
+     */
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.getAllSounds().forEach(sound => sound.muted = this.isMuted);
+        return this.isMuted;
     }
 
     /**

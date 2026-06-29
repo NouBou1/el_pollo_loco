@@ -38,9 +38,15 @@
 
     <h1>El Pollo Loco</h1>
 
-    <canvas width="720" height="480" id="game-canvas">
+    <div class="canvas-wrapper">
+        <canvas width="720" height="480" id="game-canvas">
 
-    </canvas>
+        </canvas>
+
+        <button id="play-btn" class="play-btn hidden" onclick="startOrRestartGame()" aria-label="Spiel starten">
+            ▶
+        </button>
+    </div>
 
     <nav id="mobile-controls" class="mobile-controls" aria-label="Mobile Spielsteuerung">
         <fieldset class="mobile-controls-group">
@@ -55,9 +61,14 @@
         </fieldset>
     </nav>
 
-    <button id="toggle-legend-btn" onclick="toggleLegend()">
-        Steuerung anzeigen
-    </button>
+    <div class="action-buttons">
+        <button id="toggle-legend-btn" onclick="toggleLegend()">
+            Steuerung anzeigen
+        </button>
+        <button id="mute-btn" onclick="toggleSoundMute()" aria-label="Sound ausschalten">
+            🔊
+        </button>
+    </div>
 
     <section id="controls-legend" class="legend hidden">
         <button id="close-legend-btn" class="close-legend-btn" onclick="hideLegend()"

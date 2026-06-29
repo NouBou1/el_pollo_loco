@@ -26,6 +26,12 @@ h1 {
     letter-spacing: 2px;
 }
 
+.canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+}
+
 canvas {
     background-color: black;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -37,11 +43,53 @@ canvas {
     height: auto;
 }
 
+.play-btn {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: linear-gradient(to bottom, #ff6b35, #d95426);
+    color: white;
+    border: 3px solid #8B4513;
+    border-radius: 50%;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.play-btn:hover {
+    background: linear-gradient(to bottom, #ff8555, #ff6b35);
+    transform: scale(1.05);
+}
+
+.play-btn:active {
+    transform: scale(1);
+}
+
+.play-btn.hidden {
+    display: none;
+}
 
 
-#toggle-legend-btn {
-    font-family: 'Danfo', serif;
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
     margin-top: 20px;
+}
+
+#toggle-legend-btn,
+#mute-btn {
+    font-family: 'Danfo', serif;
     padding: 12px 24px;
     background: linear-gradient(to bottom, #ff6b35, #d95426);
     color: white;
@@ -54,13 +102,20 @@ canvas {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-#toggle-legend-btn:hover {
+#mute-btn {
+    padding: 12px 20px;
+    line-height: 1;
+}
+
+#toggle-legend-btn:hover,
+#mute-btn:hover {
     background: linear-gradient(to bottom, #ff8555, #ff6b35);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-#toggle-legend-btn:active {
+#toggle-legend-btn:active,
+#mute-btn:active {
     transform: translateY(0);
 }
 
@@ -261,9 +316,17 @@ fieldset.mobile-controls-group {
         font-size: 36px;
     }
 
-    #toggle-legend-btn {
+    #toggle-legend-btn,
+    #mute-btn {
         font-size: 20px;
         padding: 8px 16px;
+    }
+
+    .play-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+        border-width: 3px;
     }
 
     .legend {
@@ -323,12 +386,23 @@ fieldset.mobile-controls-group {
         border-width: 2px;
     }
 
-    #toggle-legend-btn {
+    .action-buttons {
+        margin-top: 0;
+    }
+
+    #toggle-legend-btn,
+    #mute-btn {
         font-size: 10px;
         padding: 1px 6px;
-        margin-top: 0;
         border-width: 1px;
         flex: 0 0 auto;
+    }
+
+    .play-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border-width: 2px;
     }
 
     .legend {
