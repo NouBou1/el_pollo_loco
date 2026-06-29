@@ -14,9 +14,40 @@ function init() {
     canvas = document.getElementById("game-canvas");
     loadImages();
     showStartScreen();
+    showPlayButton('▶');
     setupMobileControls();
     canvasTapToStart();
+    applyStoredMutePreference();
     soundManager.playBackgroundMusic();
+    document.body.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
+/**
+ * Reveals the play button with the given label.
+ * @param {string} label - Text to display on the button.
+ */
+function showPlayButton(symbol) {
+    const button = document.getElementById('play-btn');
+    button.textContent = symbol;
+    button.setAttribute('aria-label', symbol === '▶' ? 'Spiel starten' : 'Spiel neu starten');
+    button.classList.remove('hidden');
+}
+
+/**
+ * Hides the play button.
+ */
+function hidePlayButton() {
+    document.getElementById('play-btn').classList.add('hidden');
+}
+
+const PLAY_BUTTON_END_DELAY_MS = 2000;
+
+/**
+ * Reveals the play button with the given label after a delay.
+ * @param {string} label - Text to display on the button.
+ */
+function showPlayButtonDelayed(label) {
+    setTimeout(() => showPlayButton(label), PLAY_BUTTON_END_DELAY_MS);
 }
 
 /**
@@ -116,6 +147,7 @@ function showStartScreen() {
  */
 function startGame() {
     gameStarted = true;
+    hidePlayButton();
     world = new World(canvas, keyboard, soundManager);
     checkGameState();
 }
@@ -162,6 +194,7 @@ function showGameOver() {
     world.character.sounds.playGameOverSound();
     let ctx = canvas.getContext('2d');
     ctx.drawImage(gameOverImage, 0, 0, canvas.width, canvas.height);
+    showPlayButtonDelayed('⟲');
 }
 
 /**
@@ -179,6 +212,7 @@ function showWin() {
     let x = (canvas.width - imgWidth) / 2;
     let y = (canvas.height - imgHeight) / 2;
     ctx.drawImage(winImage, x, y, imgWidth, imgHeight);
+    showPlayButtonDelayed('⟲');
 }
 
 /**
@@ -214,6 +248,36 @@ function showLegend() {
 function hideLegend() {
     document.getElementById('controls-legend').classList.add('hidden');
     document.getElementById('toggle-legend-btn').textContent = 'Steuerung anzeigen';
+}
+
+/**
+ * Toggles the game's sound on or off and persists the preference.
+ */
+function toggleSoundMute() {
+    const muted = soundManager.toggleMute();
+    localStorage.setItem('gameMuted', muted);
+    updateMuteButton(muted);
+}
+
+/**
+ * Updates the mute button's icon and label to reflect the muted state.
+ * @param {boolean} muted - Whether sound is currently muted.
+ */
+function updateMuteButton(muted) {
+    const button = document.getElementById('mute-btn');
+    button.textContent = muted ? '🔇' : '🔊';
+    button.setAttribute('aria-label', muted ? 'Sound einschalten' : 'Sound ausschalten');
+}
+
+/**
+ * Applies a previously saved mute preference from localStorage on load.
+ */
+function applyStoredMutePreference() {
+    const wasMuted = localStorage.getItem('gameMuted') === 'true';
+    if (wasMuted) {
+        soundManager.toggleMute();
+    }
+    updateMuteButton(wasMuted);
 }
 
 document.addEventListener('click', (e) => {

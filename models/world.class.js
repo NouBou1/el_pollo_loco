@@ -19,8 +19,8 @@ class World {
     camera_x = 0;
     level = level1;
     hit = false;
-    bottleStatusbar = new BottleStatusbar();
-    coinStatusbar = new CoinStatusbar();
+    bottleStatusbar = new BottleStatusbar(this.bottles.length);
+    coinStatusbar = new CoinStatusbar(this.coins.length);
     endbossStatusbar = new EndbossStatusbar();
     spawnDistance = 30;    
     nextSpawnX = 0;          

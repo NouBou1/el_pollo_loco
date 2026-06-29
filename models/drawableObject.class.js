@@ -45,6 +45,21 @@ class DrawableObject {
     }
 
     /**
+     * Computes this object's collision box by applying its `offset`
+     * (top/left/right/bottom), if defined, to its sprite bounding box.
+     * @returns {{x: number, y: number, width: number, height: number}} The collision box.
+     */
+    getCollisionBox() {
+        const offset = this.offset || { top: 0, left: 0, right: 0, bottom: 0 };
+        return {
+            x: this.x + offset.left,
+            y: this.y + offset.top,
+            width: this.width - offset.left - offset.right,
+            height: this.height - offset.top - offset.bottom
+        };
+    }
+
+    /**
      * Draws the object's collision box outline for debugging purposes.
      * @param {CanvasRenderingContext2D} ctx - Canvas context to draw on.
      */
