@@ -326,6 +326,7 @@ class Character extends MovableObject {
         this.speedY = 30;
         this.isJumping = true;
         this.sounds.playJumpingSound();
+        this.lastMovement = Date.now();
     }
 
     /**
