@@ -242,7 +242,7 @@ class Character extends MovableObject {
      * Plays the jump animation and stops movement sounds.
      */
     playJumpAnimation() {
-        this.playAnimation(this.IMAGES_JUMPING);
+        this.playAnimationOnce(this.IMAGES_JUMPING);
         this.stopMovementSounds();
     }
 
@@ -325,6 +325,7 @@ class Character extends MovableObject {
     jump() {
         this.speedY = 30;
         this.isJumping = true;
+        this.currentImageIndex = 0;
         this.sounds.playJumpingSound();
         this.lastMovement = Date.now();
     }

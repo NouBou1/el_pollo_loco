@@ -63,6 +63,16 @@ class MovableObject extends DrawableObject {
     }
 
     /**
+     * Advances through a sequence once and holds on the last frame instead of looping.
+     * @param {string[]} images - Sequence of image paths to play once.
+     */
+    playAnimationOnce(images) {
+        let i = Math.min(this.currentImageIndex, images.length - 1);
+        this.img = this.imageCache[images[i]];
+        this.currentImageIndex++;
+    }
+
+    /**
      * Checks whether the object is currently above ground level.
      * @returns {boolean} True if above ground, or always true for throwable objects.
      */
