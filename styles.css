@@ -109,6 +109,37 @@ canvas {
 }
 
 
+.rotate-overlay {
+    display: none;
+}
+
+@media (pointer: coarse) and (orientation: portrait) {
+    .rotate-overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        inset: 0;
+        background: #1a1a1a;
+        color: #f5cd05;
+        font-family: 'Danfo', serif;
+        text-align: center;
+        gap: 16px;
+        z-index: 2000;
+        padding: 20px;
+    }
+
+    .rotate-overlay p {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    body>*:not(.rotate-overlay) {
+        display: none;
+    }
+}
+
 .legend {
     position: fixed;
     top: 50%;
