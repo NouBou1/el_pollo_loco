@@ -19,6 +19,7 @@ function init() {
     canvasTapToStart();
     applyStoredMutePreference();
     soundManager.playBackgroundMusic();
+    document.body.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
 /**

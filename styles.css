@@ -44,6 +44,7 @@ h1 {
     position: relative;
     width: 100%;
     max-width: 720px;
+    text-align: center;
 }
 
 .site-footer {
@@ -64,8 +65,9 @@ h1 {
     height: auto;
     min-height: 98dvh;
     justify-content: flex-start;
-    padding: 40px 20px;
+    padding: 40px 20px 80px;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .legal-content {
@@ -164,7 +166,6 @@ canvas {
 
 #toggle-legend-btn,
 #mute-btn {
-    font-family: 'Danfo', serif;
     padding: 12px 24px;
     background: linear-gradient(to bottom, #ff6b35, #d95426);
     color: white;
@@ -178,8 +179,13 @@ canvas {
 }
 
 #mute-btn {
+    font-family: 'Danfo', serif;
     padding: 12px 20px;
     line-height: 1;
+}
+
+#toggle-legend-btn {
+    font-family: 'Poppins', sans-serif;
 }
 
 #toggle-legend-btn:hover,
@@ -231,6 +237,7 @@ canvas {
         touch-action: none;
         user-select: none;
         -webkit-user-select: none;
+        -webkit-touch-callout: none;
     }
 
     .control-btn:active {
@@ -392,6 +399,22 @@ fieldset.mobile-controls-group {
         font-size: 36px;
     }
 
+    .legal-page {
+        padding: 20px 12px 60px;
+    }
+
+    .legal-content {
+        padding: 20px 22px;
+    }
+
+    .legal-content h1 {
+        font-size: 30px;
+    }
+
+    .legal-content h2 {
+        font-size: 18px;
+    }
+
     #toggle-legend-btn,
     #mute-btn {
         font-size: 20px;
@@ -454,12 +477,68 @@ fieldset.mobile-controls-group {
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     }
 
+    .canvas-wrapper {
+        width: auto;
+    }
+
     canvas {
         flex: 0 0 auto;
         height: calc(100dvh - 80px);
         width: auto;
         max-width: 100%;
         border-width: 2px;
+    }
+
+    .site-footer {
+        position: fixed;
+        top: 6px;
+        right: 6px;
+        margin-top: 0;
+        z-index: 600;
+    }
+
+    .site-footer a {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+
+    .legal-page {
+        height: 100dvh;
+        overflow-y: hidden;
+        justify-content: center;
+        padding: 8px 16px;
+    }
+
+    .legal-content {
+        padding: 10px 18px;
+        max-height: 90dvh;
+        overflow-y: hidden;
+    }
+
+    .legal-content h1 {
+        font-size: 18px;
+        margin: 0 0 4px 0;
+    }
+
+    .legal-content p {
+        font-size: 11px;
+        margin: 2px 0;
+        line-height: 1.3;
+    }
+
+    .legal-content h2 {
+        font-size: 13px;
+        margin: 6px 0 2px 0;
+    }
+
+    .legal-content .legal-source {
+        font-size: 9px;
+        margin-top: 6px;
+    }
+
+    .legal-content .back-link {
+        font-size: 11px;
+        margin-top: 6px;
     }
 
     .action-buttons {
