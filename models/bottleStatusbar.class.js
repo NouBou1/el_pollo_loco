@@ -4,6 +4,7 @@
  */
 class BottleStatusbar extends DrawableObject {
     percentage = 100;
+    total = 1;
     IMAGES_BOTTLESTATUSBAR = [
         'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
         'assets/img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/20.png',
@@ -15,10 +16,12 @@ class BottleStatusbar extends DrawableObject {
 
     /**
      * Creates the bottle statusbar, initialized at 0 bottles.
+     * @param {number} total - Total number of bottles collectible in the level.
      */
-    constructor() {
+    constructor(total = 5) {
         super();
         this.loadImages(this.IMAGES_BOTTLESTATUSBAR);
+        this.total = total > 0 ? total : 1;
         this.setAmount(0);
         this.x = 20;
         this.y = 70;
@@ -27,11 +30,33 @@ class BottleStatusbar extends DrawableObject {
     }
 
     /**
-     * Updates the displayed image based on the number of collected bottles.
-     * @param {number} amount - Number of bottles collected (0-5).
+     * Updates the displayed image based on the share of collected bottles relative to the level total.
+     * @param {number} amount - Number of bottles collected so far.
      */
     setAmount(amount) {
-        let index = Math.min(amount, 5);
+        let percentage = (amount / this.total) * 100;
+        let index = this.getImageIndex(percentage);
         this.img = this.imageCache[this.IMAGES_BOTTLESTATUSBAR[index]];
     }
-}   
+
+    /**
+     * Maps a collected percentage to an index into {@link BottleStatusbar#IMAGES_BOTTLESTATUSBAR}.
+     * @param {number} percentage - Share of bottles collected, 0-100.
+     * @returns {number} Image index from 0 (empty) to 5 (full).
+     */
+    getImageIndex(percentage) {
+        if (percentage >= 95) {
+            return 5;
+        } else if (percentage >= 75) {
+            return 4;
+        } else if (percentage >= 55) {
+            return 3;
+        } else if (percentage >= 35) {
+            return 2;
+        } else if (percentage >= 15) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
