@@ -17,15 +17,19 @@ class MovableObject extends DrawableObject {
 
 
     /**
-     * Checks whether this object's bounding box overlaps another's.
+     * Checks whether this object's collision box overlaps another's.
+     * Uses each object's `offset` (if defined) to shrink the raw sprite
+     * bounding box down to its actual visible area.
      * @param {MovableObject} mo - The other object to check against.
-     * @returns {boolean} True if the bounding boxes overlap.
+     * @returns {boolean} True if the collision boxes overlap.
      */
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.x < mo.x + mo.width &&
-            this.y + this.height > mo.y &&
-            this.y < mo.y + mo.height;
+        const a = this.getCollisionBox();
+        const b = mo.getCollisionBox();
+        return a.x + a.width > b.x &&
+            a.x < b.x + b.width &&
+            a.y + a.height > b.y &&
+            a.y < b.y + b.height;
     }
 
     /**

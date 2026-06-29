@@ -14,7 +14,7 @@ class Endboss extends MovableObject {
     contactDamage = 7;
     offset = {
         top: 100,
-        left: 50,
+        left: 130,
         right: 50,
         bottom: 50
     };
@@ -25,8 +25,12 @@ class Endboss extends MovableObject {
     isAttacking = false;
     attackImageIndex = 0;
     lastAttack = 0;
-    attackCooldown = 2500;
-    attackRange = 150;
+    attackCooldown = 1800;
+    attackRange = 130;
+    attackLungeDistance = 50;
+    attackStartX = 0;
+    attackStartTime = 0;
+    attackFrameDuration = 300;
     deathAnimationComplete = false;
     deathAnimationIndex = 0;
     deathSoundPlayed = false;
@@ -97,7 +101,7 @@ class Endboss extends MovableObject {
     startAnimationLoop() {
         setInterval(() => {
             this.updateAnimationState();
-        }, 1000 / 2);
+        }, 1000 / 10);
     }
 
     /**
@@ -209,6 +213,8 @@ class Endboss extends MovableObject {
     startAttack() {
         this.isAttacking = true;
         this.attackImageIndex = 0;
+        this.attackStartX = this.x;
+        this.attackStartTime = Date.now();
         this.lastAttack = Date.now();
         if (this.sounds) {
             this.sounds.playBossAttackSound();
@@ -227,18 +233,28 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Plays the next frame of the attack animation, dealing damage on the last frame.
+     * Plays the next frame of the attack animation, dealing damage once it finishes.
      */
     playAttackAnimation() {
+        const elapsed = Date.now() - this.attackStartTime;
+        this.attackImageIndex = Math.floor(elapsed / this.attackFrameDuration);
         if (this.attackImageIndex < this.IMAGES_ATTACK.length) {
             this.img = this.imageCache[this.IMAGES_ATTACK[this.attackImageIndex]];
-            if (this.attackImageIndex === this.IMAGES_ATTACK.length - 1) {
-                this.hitCharacterIfInRange();
-            }
-            this.attackImageIndex++;
+            this.updateAttackLunge();
         } else {
+            this.hitCharacterIfInRange();
+            this.x = this.attackStartX;
             this.isAttacking = false;
         }
+    }
+
+    /**
+     * Moves the boss towards the character as the attack animation progresses,
+     * peaking on the last frame where the hit lands.
+     */
+    updateAttackLunge() {
+        const progress = this.attackImageIndex / (this.IMAGES_ATTACK.length - 1);
+        this.x = this.attackStartX - this.attackLungeDistance * progress;
     }
 
     /**
@@ -266,7 +282,7 @@ class Endboss extends MovableObject {
      * @param {Character} character - The character to damage.
      */
     damageCharacter(character) {
-        character.hit(20);
+        character.hit(25);
         this.world.statusbar[0].setPercentage(character.energy);
     }
 

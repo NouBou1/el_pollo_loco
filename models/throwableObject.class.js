@@ -9,6 +9,12 @@ class ThrowableObject extends MovableObject {
     y = 190;
     height = 50;
     width = 50;
+    offset = {
+        top: 8,
+        left: 7,
+        right: 7,
+        bottom: 6
+    };
     IMAGES_ROTATION = [
         'assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'assets/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
