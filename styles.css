@@ -5,6 +5,20 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/fonts/Poppins/Poppins-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/fonts/Poppins/Poppins-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -30,6 +44,67 @@ h1 {
     position: relative;
     width: 100%;
     max-width: 720px;
+}
+
+.site-footer {
+    margin-top: 12px;
+}
+
+.site-footer a {
+    color: #f5cd05;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+.legal-page {
+    height: auto;
+    min-height: 98dvh;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.legal-content {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Poppins', sans-serif;
+}
+
+.legal-content h1 {
+    font-size: 40px;
+}
+
+.legal-content h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #f5cd05;
+    font-size: 22px;
+    margin: 20px 0 10px 0;
+}
+
+.legal-content a {
+    color: #f5cd05;
+}
+
+.legal-content .legal-source {
+    margin-top: 24px;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.legal-content .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
 }
 
 canvas {
@@ -247,7 +322,7 @@ canvas {
 }
 
 .legend h3 {
-    font-family: 'Danfo', serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0 0 15px 0;
     color: #5c3317;
     font-size: 22px;
@@ -283,6 +358,7 @@ canvas {
     margin: 0;
     color: #3d2817;
     font-size: 24px;
+    font-family: 'Poppins', sans-serif;
 }
 
 kbd {
@@ -294,7 +370,7 @@ kbd {
     min-width: 70px;
     text-align: center;
     border: 3px solid #8B4513;
-    font-family: 'Danfo', serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 fieldset.mobile-controls-group {
