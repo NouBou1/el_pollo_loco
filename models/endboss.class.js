@@ -26,8 +26,8 @@ class Endboss extends MovableObject {
     attackImageIndex = 0;
     lastAttack = 0;
     attackCooldown = 1800;
-    attackRange = 130;
-    attackLungeDistance = 50;
+    attackRange = 30;
+    attackLungeDistance = 160;
     attackStartX = 0;
     attackStartTime = 0;
     attackFrameDuration = 300;

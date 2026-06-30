@@ -45,11 +45,11 @@ class EndbossStatusbar extends DrawableObject {
             return 0;
         } else if (this.percentage >= 75) {
             return 1;
-        } else if (this.percentage >= 55) {
+        } else if (this.percentage >= 50) {
             return 2;
-        } else if (this.percentage >= 35) {
+        } else if (this.percentage >= 25) {
             return 3;
-        } else if (this.percentage >= 15) {
+        } else if (this.percentage >= 0) {
             return 4;
         } else {
             return 5;
