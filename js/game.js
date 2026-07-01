@@ -339,3 +339,7 @@ function startOrRestartGame() {
         startGame();
     }
 }
+
+
+
+
