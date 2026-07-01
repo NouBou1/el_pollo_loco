@@ -18,7 +18,6 @@ function init() {
     setupMobileControls();
     canvasTapToStart();
     applyStoredMutePreference();
-    soundManager.playBackgroundMusic();
     document.body.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
@@ -149,6 +148,7 @@ function startGame() {
     gameStarted = true;
     hidePlayButton();
     world = new World(canvas, keyboard, soundManager);
+    soundManager.playBackgroundMusic();
     checkGameState();
 }
 
