@@ -7,6 +7,7 @@ class Coin extends DrawableObject {
     y = 360;
     height = 80;
     width = 80;
+    offset = { top: 33, left: 33, right: 33, bottom: 33 };
 
     /**
      * Creates a coin at a given or random horizontal position.

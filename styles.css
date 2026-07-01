@@ -24,11 +24,14 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 98dvh;
-    width: 99dvw;
+    height: 100dvh;
+    width: 100%;
+    margin: 0;
     background-image: url('assets/img/5_background/desert-background2.png');
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 h1 {
@@ -116,6 +119,7 @@ canvas {
     border-radius: 15px;
     width: 100%;
     max-width: 720px;
+    max-height: calc(100dvh - 180px);
     aspect-ratio: 720 / 480;
     height: auto;
 }
@@ -485,6 +489,7 @@ fieldset.mobile-controls-group {
     canvas {
         flex: 0 0 auto;
         height: calc(100dvh - 80px);
+        max-height: none;
         width: auto;
         max-width: 100%;
         border-width: 2px;
@@ -513,23 +518,23 @@ fieldset.mobile-controls-group {
     }
 
     .legal-content p {
-        font-size: 11px;
+        font-size: 16px;
         margin: 2px 0;
         line-height: 1.3;
     }
 
     .legal-content h2 {
-        font-size: 13px;
+        font-size: 16px;
         margin: 6px 0 2px 0;
     }
 
     .legal-content .legal-source {
-        font-size: 9px;
+        font-size: 16px;
         margin-top: 6px;
     }
 
     .legal-content .back-link {
-        font-size: 11px;
+        font-size: 16px;
         margin-top: 6px;
     }
 
@@ -539,7 +544,7 @@ fieldset.mobile-controls-group {
 
     #toggle-legend-btn,
     #mute-btn {
-        font-size: 10px;
+        font-size: 16px;
         padding: 1px 6px;
         border-width: 1px;
         flex: 0 0 auto;
@@ -548,7 +553,7 @@ fieldset.mobile-controls-group {
     .play-btn {
         width: 32px;
         height: 32px;
-        font-size: 14px;
+        font-size: 16px;
         border-width: 2px;
     }
 
@@ -560,13 +565,13 @@ fieldset.mobile-controls-group {
     }
 
     .legend h2 {
-        font-size: 14px;
+        font-size: 18px;
         margin: 0 0 8px 0;
         padding-bottom: 4px;
     }
 
     .legend h3 {
-        font-size: 12px;
+        font-size: 16px;
         margin: 0 0 6px 0;
     }
 
@@ -575,11 +580,11 @@ fieldset.mobile-controls-group {
     }
 
     .controls-list dd {
-        font-size: 11px;
+        font-size: 16px;
     }
 
     kbd {
-        font-size: 11px;
+        font-size: 16px;
         padding: 2px 8px;
         min-width: 30px;
         border-width: 2px;

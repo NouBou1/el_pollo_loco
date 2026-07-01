@@ -7,6 +7,7 @@ class Bottle extends DrawableObject {
     y = 360;
     height = 60;
     width = 60;
+    offset = { top: 18, left: 27, right: 27, bottom: 12 };
 
     /**
      * Creates a bottle at a given or random horizontal position.

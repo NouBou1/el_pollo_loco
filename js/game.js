@@ -18,7 +18,6 @@ function init() {
     setupMobileControls();
     canvasTapToStart();
     applyStoredMutePreference();
-    soundManager.playBackgroundMusic();
     document.body.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
@@ -149,6 +148,7 @@ function startGame() {
     gameStarted = true;
     hidePlayButton();
     world = new World(canvas, keyboard, soundManager);
+    soundManager.playBackgroundMusic();
     checkGameState();
 }
 
@@ -290,12 +290,13 @@ document.addEventListener('click', (e) => {
 });
 
 const KEY_MAPPINGS = {
-    32: 'SPACE',
-    37: 'LEFT',
-    38: 'SPACE',
-    39: 'RIGHT',
-    40: 'DOWN',
-    68: 'D'
+    ' ':          'SPACE',
+    'ArrowLeft':  'LEFT',
+    'ArrowUp':    'SPACE',
+    'ArrowRight': 'RIGHT',
+    'ArrowDown':  'DOWN',
+    'd':          'D',
+    'D':          'D'
 };
 
 /**
@@ -303,7 +304,7 @@ const KEY_MAPPINGS = {
  * @param {KeyboardEvent} e - The keydown event.
  */
 function handleKeyDown(e) {
-    const keyAction = KEY_MAPPINGS[e.keyCode];
+    const keyAction = KEY_MAPPINGS[e.key];
     if (keyAction) {
         keyboard[keyAction] = true;
     }
@@ -314,7 +315,7 @@ function handleKeyDown(e) {
  * @param {KeyboardEvent} e - The keyup event.
  */
 function handleKeyUp(e) {
-    const keyAction = KEY_MAPPINGS[e.keyCode];
+    const keyAction = KEY_MAPPINGS[e.key];
     if (keyAction) {
         keyboard[keyAction] = false;
     }
@@ -324,7 +325,7 @@ window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);
 
 document.addEventListener('keydown', (e) => {
-    if (!gameStarted && e.keyCode === 13) {
+    if (!gameStarted && e.key === 'Enter') {
         startOrRestartGame();
     }
 });
@@ -339,3 +340,7 @@ function startOrRestartGame() {
         startGame();
     }
 }
+
+
+
+
