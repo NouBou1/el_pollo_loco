@@ -2,17 +2,17 @@
  * Centralizes loading and playback of all game sound effects and music.
  */
 class SoundManager {
-    walking_sound = new Audio('assets/sounds/pepe_sounds/pepe-walk.wav');
-    jumping_sound = new Audio('assets/sounds/pepe_sounds/pepe-jump.wav');
+    walking_sound = new Audio('assets/sounds/pepe_sounds/pepe-walk.mp3');
+    jumping_sound = new Audio('assets/sounds/pepe_sounds/pepe-jump.mp3');
     hurt_sound = new Audio('assets/sounds/pepe_sounds/pepe-hurt.mp3');
     death_sound = new Audio('assets/sounds/pepe_sounds/pepe-death.mp3');
-    collect_bottle_sound = new Audio('assets/sounds/pepe_sounds/collect-bottle.wav');
+    collect_bottle_sound = new Audio('assets/sounds/pepe_sounds/collect-bottle.mp3');
     collect_coin_sound = new Audio('assets/sounds/pepe_sounds/collect-coin.mp3');
     break_sound = new Audio('assets/sounds/pepe_sounds/bottle-break.mp3');
-    throw_sound = new Audio('assets/sounds/pepe_sounds/pepe-bottle-throw.wav');
+    throw_sound = new Audio('assets/sounds/pepe_sounds/pepe-bottle-throw.mp3');
     snoring_sound = new Audio('assets/sounds/pepe_sounds/pepe-snoring.mp3');
 
-    chicken_walking_sound = new Audio('assets/sounds/enemy/chicken/chicken-walk.wav');
+    chicken_walking_sound = new Audio('assets/sounds/enemy/chicken/chicken-walk.mp3');
     chicken_hurt_sound = new Audio('assets/sounds/enemy/chicken/chicken-hurt.mp3');
 
     boss_alert_sound = new Audio('assets/sounds/enemy/boss/boss-alert.mp3');
