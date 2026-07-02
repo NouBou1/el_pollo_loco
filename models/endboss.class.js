@@ -26,8 +26,8 @@ class Endboss extends MovableObject {
     attackImageIndex = 0;
     lastAttack = 0;
     attackCooldown = 1800;
-    attackRange = 30;
-    attackLungeDistance = 160;
+    attackRange = 50;
+    attackLungeDistance = 200;
     attackStartX = 0;
     attackStartTime = 0;
     attackFrameDuration = 300;
@@ -282,7 +282,7 @@ class Endboss extends MovableObject {
      * @param {Character} character - The character to damage.
      */
     damageCharacter(character) {
-        character.hit(25);
+        character.hit(30);
         this.world.statusbar[0].setPercentage(character.energy);
     }
 
