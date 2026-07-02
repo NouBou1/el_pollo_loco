@@ -24,6 +24,6 @@ class Bottle extends DrawableObject {
      */
     getRandomBottleImage() {
         const randomNumber = Math.floor(Math.random() * 2) + 1;
-        return `assets/img/6_salsa_bottle/${randomNumber}_salsa_bottle_on_ground.png`;
+        return `assets/img/6_salsa_bottle/${randomNumber}_salsa_bottle_on_ground.webp`;
     }
 }

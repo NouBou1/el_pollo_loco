@@ -14,7 +14,44 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     contactDamage = 2;
+    intervalIds = [];
+    timeoutIds = [];
 
+    /**
+     * Starts a tracked interval so it can later be stopped via {@link MovableObject#stopIntervals}.
+     * @param {Function} callback - Function to run on each tick.
+     * @param {number} ms - Interval duration in milliseconds.
+     * @returns {number} The interval id.
+     */
+    startInterval(callback, ms) {
+        const id = setInterval(callback, ms);
+        this.intervalIds.push(id);
+        return id;
+    }
+
+    /**
+     * Starts a tracked timeout so it can later be cancelled via {@link MovableObject#stopIntervals}.
+     * Needed for self-rescheduling timeout chains (e.g. {@link SmallChicken#scheduleNextJump}),
+     * which would otherwise keep firing forever.
+     * @param {Function} callback - Function to run once the delay elapses.
+     * @param {number} ms - Delay in milliseconds.
+     * @returns {number} The timeout id.
+     */
+    startTimeout(callback, ms) {
+        const id = setTimeout(callback, ms);
+        this.timeoutIds.push(id);
+        return id;
+    }
+
+    /**
+     * Stops every interval and timeout started via {@link MovableObject#startInterval}/{@link MovableObject#startTimeout}.
+     */
+    stopIntervals() {
+        this.intervalIds.forEach(id => clearInterval(id));
+        this.timeoutIds.forEach(id => clearTimeout(id));
+        this.intervalIds = [];
+        this.timeoutIds = [];
+    }
 
     /**
      * Checks whether this object's collision box overlaps another's.
@@ -36,7 +73,7 @@ class MovableObject extends DrawableObject {
      * Continuously moves the object to the left at its current speed.
      */
     moveLeft() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.x -= this.speed;
         }, 1000 / 60);
     }
@@ -92,7 +129,7 @@ class MovableObject extends DrawableObject {
      * Starts a recurring gravity simulation for this object.
      */
     applyGravity() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.updateGravityPhysics();
             this.applyGroundLimit();
         }, 1000 / 25);

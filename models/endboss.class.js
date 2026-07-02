@@ -26,8 +26,8 @@ class Endboss extends MovableObject {
     attackImageIndex = 0;
     lastAttack = 0;
     attackCooldown = 1800;
-    attackRange = 30;
-    attackLungeDistance = 160;
+    attackRange = 50;
+    attackLungeDistance = 200;
     attackStartX = 0;
     attackStartTime = 0;
     attackFrameDuration = 300;
@@ -35,41 +35,41 @@ class Endboss extends MovableObject {
     deathAnimationIndex = 0;
     deathSoundPlayed = false;
     IMAGES_WALKING = [
-        'assets/img/4_enemie_boss_chicken/1_walk/G1.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G2.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G3.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G4.png',
+        'assets/img/4_enemie_boss_chicken/1_walk/G1.webp',
+        'assets/img/4_enemie_boss_chicken/1_walk/G2.webp',
+        'assets/img/4_enemie_boss_chicken/1_walk/G3.webp',
+        'assets/img/4_enemie_boss_chicken/1_walk/G4.webp',
     ];
     IMAGES_ALERT = [
-        'assets/img/4_enemie_boss_chicken/2_alert/G5.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G6.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G7.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G8.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G9.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G10.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G11.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G12.png',
+        'assets/img/4_enemie_boss_chicken/2_alert/G5.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G6.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G7.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G8.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G9.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G10.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G11.webp',
+        'assets/img/4_enemie_boss_chicken/2_alert/G12.webp',
     ];
     IMAGES_ATTACK = [
-        'assets/img/4_enemie_boss_chicken/3_attack/G13.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G14.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G15.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G16.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G17.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G18.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G19.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G20.png',
+        'assets/img/4_enemie_boss_chicken/3_attack/G13.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G14.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G15.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G16.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G17.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G18.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G19.webp',
+        'assets/img/4_enemie_boss_chicken/3_attack/G20.webp',
     ];
     IMAGES_HURT = [
-        'assets/img/4_enemie_boss_chicken/4_hurt/G21.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G23.png'
+        'assets/img/4_enemie_boss_chicken/4_hurt/G21.webp',
+        'assets/img/4_enemie_boss_chicken/4_hurt/G22.webp',
+        'assets/img/4_enemie_boss_chicken/4_hurt/G23.webp'
     ];
 
     IMAGES_DEAD = [
-        'assets/img/4_enemie_boss_chicken/5_dead/G24.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G25.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G26.png'
+        'assets/img/4_enemie_boss_chicken/5_dead/G24.webp',
+        'assets/img/4_enemie_boss_chicken/5_dead/G25.webp',
+        'assets/img/4_enemie_boss_chicken/5_dead/G26.webp'
     ];
     currentImageIndex = 0;
     world;
@@ -99,7 +99,7 @@ class Endboss extends MovableObject {
      * Starts the recurring loop that updates the boss's animation state.
      */
     startAnimationLoop() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.updateAnimationState();
         }, 1000 / 10);
     }
@@ -108,7 +108,7 @@ class Endboss extends MovableObject {
      * Starts the recurring loop that moves the boss towards its target position.
      */
     startMovementLoop() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.moveTowardsTarget();
         }, 1000 / 60);
     }
@@ -282,7 +282,7 @@ class Endboss extends MovableObject {
      * @param {Character} character - The character to damage.
      */
     damageCharacter(character) {
-        character.hit(25);
+        character.hit(30);
         this.world.statusbar[0].setPercentage(character.energy);
     }
 

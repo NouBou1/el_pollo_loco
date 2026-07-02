@@ -16,60 +16,60 @@ class Character extends MovableObject {
         bottom: 5
     };
     IMAGES_WALKING = [
-        'assets/img/2_character_pepe/2_walk/W-21.png',
-        'assets/img/2_character_pepe/2_walk/W-22.png',
-        'assets/img/2_character_pepe/2_walk/W-23.png',
-        'assets/img/2_character_pepe/2_walk/W-24.png'
+        'assets/img/2_character_pepe/2_walk/W-21.webp',
+        'assets/img/2_character_pepe/2_walk/W-22.webp',
+        'assets/img/2_character_pepe/2_walk/W-23.webp',
+        'assets/img/2_character_pepe/2_walk/W-24.webp'
     ];
     IMAGES_JUMPING = [
-        'assets/img/2_character_pepe/3_jump/J-31.png',
-        'assets/img/2_character_pepe/3_jump/J-32.png',
-        'assets/img/2_character_pepe/3_jump/J-33.png',
-        'assets/img/2_character_pepe/3_jump/J-34.png',
-        'assets/img/2_character_pepe/3_jump/J-35.png',
-        'assets/img/2_character_pepe/3_jump/J-36.png',
-        'assets/img/2_character_pepe/3_jump/J-37.png',
-        'assets/img/2_character_pepe/3_jump/J-38.png',
-        'assets/img/2_character_pepe/3_jump/J-39.png'
+        'assets/img/2_character_pepe/3_jump/J-31.webp',
+        'assets/img/2_character_pepe/3_jump/J-32.webp',
+        'assets/img/2_character_pepe/3_jump/J-33.webp',
+        'assets/img/2_character_pepe/3_jump/J-34.webp',
+        'assets/img/2_character_pepe/3_jump/J-35.webp',
+        'assets/img/2_character_pepe/3_jump/J-36.webp',
+        'assets/img/2_character_pepe/3_jump/J-37.webp',
+        'assets/img/2_character_pepe/3_jump/J-38.webp',
+        'assets/img/2_character_pepe/3_jump/J-39.webp'
     ];
     IMAGES_HURT = [
-        'assets/img/2_character_pepe/4_hurt/H-41.png',
-        'assets/img/2_character_pepe/4_hurt/H-42.png',
-        'assets/img/2_character_pepe/4_hurt/H-43.png',
+        'assets/img/2_character_pepe/4_hurt/H-41.webp',
+        'assets/img/2_character_pepe/4_hurt/H-42.webp',
+        'assets/img/2_character_pepe/4_hurt/H-43.webp',
 
     ];
     IMAGES_DEAD = [
-        'assets/img/2_character_pepe/5_dead/D-51.png',
-        'assets/img/2_character_pepe/5_dead/D-52.png',
-        'assets/img/2_character_pepe/5_dead/D-53.png',
-        'assets/img/2_character_pepe/5_dead/D-54.png',
-        'assets/img/2_character_pepe/5_dead/D-55.png',
-        'assets/img/2_character_pepe/5_dead/D-56.png',
-        'assets/img/2_character_pepe/5_dead/D-57.png',
+        'assets/img/2_character_pepe/5_dead/D-51.webp',
+        'assets/img/2_character_pepe/5_dead/D-52.webp',
+        'assets/img/2_character_pepe/5_dead/D-53.webp',
+        'assets/img/2_character_pepe/5_dead/D-54.webp',
+        'assets/img/2_character_pepe/5_dead/D-55.webp',
+        'assets/img/2_character_pepe/5_dead/D-56.webp',
+        'assets/img/2_character_pepe/5_dead/D-57.webp',
     ];
     IMAGES_IDLE = [
-        'assets/img/2_character_pepe/1_idle/idle/I-1.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-2.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-3.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-4.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-5.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-6.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-7.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-8.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-9.png',
-        'assets/img/2_character_pepe/1_idle/idle/I-10.png'
+        'assets/img/2_character_pepe/1_idle/idle/I-1.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-2.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-3.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-4.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-5.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-6.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-7.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-8.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-9.webp',
+        'assets/img/2_character_pepe/1_idle/idle/I-10.webp'
     ];
     IMAGES_LONG_IDLE = [
-        'assets/img/2_character_pepe/1_idle/long_idle/I-11.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-12.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-13.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-14.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-15.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-16.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-17.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-18.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-19.png',
-        'assets/img/2_character_pepe/1_idle/long_idle/I-20.png'
+        'assets/img/2_character_pepe/1_idle/long_idle/I-11.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-12.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-13.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-14.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-15.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-16.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-17.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-18.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-19.webp',
+        'assets/img/2_character_pepe/1_idle/long_idle/I-20.webp'
     ];
     currentImageIndex = 0;
     world;
@@ -93,7 +93,7 @@ class Character extends MovableObject {
      * Creates the character, preloads its animations and starts gravity and update loops.
      */
     constructor() {
-        super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.png');
+        super().loadImage('assets/img/2_character_pepe/1_idle/idle/I-1.webp');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
@@ -109,12 +109,12 @@ class Character extends MovableObject {
      */
     animate() {
 
-        setInterval(() => {
+        this.startInterval(() => {
             this.handleMovement();
             this.handleActions();
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.startInterval(() => {
             this.handleAnimations();
         }, 100);
     }

@@ -16,18 +16,18 @@ class ThrowableObject extends MovableObject {
         bottom: 6
     };
     IMAGES_ROTATION = [
-        'assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
+        'assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.webp'
     ];
     IMAGES_SPLASH = [
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
-        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.webp',
+        'assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.webp'
     ];
     imageCache = [];
     currentImageIndex = 0;
@@ -43,7 +43,7 @@ class ThrowableObject extends MovableObject {
      * @param {SoundManager} sounds - Sound manager used for break sound effects.
      */
     constructor(x, y, otherDirection = false, sounds) {
-        super().loadImage('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
+        super().loadImage('assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.webp');
         this.x = x;
         this.y = y;
         this.otherDirection = otherDirection;
@@ -61,11 +61,9 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 20;
         const direction = this.otherDirection ? -1 : 1;
-        this.throwInterval = setInterval(() => {
+        this.throwInterval = this.startInterval(() => {
             this.x += 10 * direction;
         }, 25);
-
-
     }
 
     /**
@@ -83,7 +81,7 @@ class ThrowableObject extends MovableObject {
      * Starts the rotation or splash animation loop depending on hit state.
      */
     animate() {
-        setInterval(() => {
+        this.startInterval(() => {
             if (this.hasHit) {
                 this.playSplashAnimation();
             } else {

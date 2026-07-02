@@ -6,19 +6,20 @@ class World {
 
     character = new Character();
     canvas;
-    enemies = level1.enemies;
-    clouds = level1.clouds;
-    backgroundObjects = level1.backgroundObjects;
-    bottles = level1.bottles;
-    coins = level1.coins;
+    level = createLevel1();
+    enemies = this.level.enemies;
+    clouds = this.level.clouds;
+    backgroundObjects = this.level.backgroundObjects;
+    bottles = this.level.bottles;
+    coins = this.level.coins;
     statusbar = [new Statusbar()];
     throwableObjects = [];
     ctx;
     keyboard;
     world;
     camera_x = 0;
-    level = level1;
     hit = false;
+    runIntervalId;
     bottleStatusbar = new BottleStatusbar(this.bottles.length);
     coinStatusbar = new CoinStatusbar(this.coins.length);
     endbossStatusbar = new EndbossStatusbar();
@@ -37,10 +38,10 @@ class World {
             const imgIndex = (i % 2) + 1;
 
             this.backgroundObjects.push(
-                new BackgroundObject('assets/img/5_background/layers/air.png', x, 0),
-                new BackgroundObject(`assets/img/5_background/layers/2_second_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`assets/img/5_background/layers/3_third_layer/${imgIndex}.png`, x, 0),
-                new BackgroundObject(`assets/img/5_background/layers/1_first_layer/${imgIndex}.png`, x, 0),
+                new BackgroundObject('assets/img/5_background/layers/air.webp', x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/2_second_layer/${imgIndex}.webp`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/3_third_layer/${imgIndex}.webp`, x, 0),
+                new BackgroundObject(`assets/img/5_background/layers/1_first_layer/${imgIndex}.webp`, x, 0),
             );
         }
     }
@@ -103,7 +104,7 @@ class World {
      */
     initializeGameOverImage() {
         this.gameOverImage = new Image();
-        this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
+        this.gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.webp';
     }
 
     /**
@@ -129,7 +130,7 @@ class World {
      * Starts the recurring game loop: collisions, cleanup and enemy spawning.
      */
     run() {
-        setInterval(() => {
+        this.runIntervalId = setInterval(() => {
             this.checkJumpOnEnemy();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
@@ -137,6 +138,18 @@ class World {
             this.removeCompletedSplashes();
             this.spawnEnemies();
         }, 1000 / 60);
+    }
+
+    /**
+     * Stops the game loop and every interval/timeout owned by the character,
+     * enemies and in-flight bottles, so a restart doesn't leave this run's
+     * background loops ticking alongside the next one.
+     */
+    stop() {
+        clearInterval(this.runIntervalId);
+        this.character.stopIntervals();
+        this.enemies.forEach(enemy => enemy.stopIntervals());
+        this.throwableObjects.forEach(bottle => bottle.stopIntervals());
     }
 
     /**
@@ -271,6 +284,7 @@ class World {
      * @param {number} enemyIndex - Index of the enemy to remove.
      */
     removeEnemy(enemyIndex) {
+        this.enemies[enemyIndex].stopIntervals();
         this.enemies.splice(enemyIndex, 1);
     }
 
@@ -300,8 +314,9 @@ class World {
             return;
         }
         this.clearCanvas();
-        this.drawMovingObjects();
+        this.drawBackgroundObjects();
         this.drawFixedObjects();
+        this.drawForegroundObjects();
         this.scheduleNextFrame();
     }
 
@@ -328,14 +343,22 @@ class World {
     }
 
     /**
-     * Draws all camera-relative (world-space) objects: background, level objects, character, enemies and bottles.
+     * Draws camera-relative background layers that must stay behind the HUD: backdrop, clouds and pickups.
      */
-    drawMovingObjects() {
+    drawBackgroundObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.backgroundObjects);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.coins);
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    /**
+     * Draws camera-relative foreground actors on top of the HUD: character, enemies and thrown bottles.
+     */
+    drawForegroundObjects() {
+        this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);
         this.addObjectsToMap(this.throwableObjects);
@@ -403,9 +426,10 @@ class World {
      * or horizontal (contact damage) handler.
      */
     checkJumpOnEnemy() {
+        const jumpState = this.captureJumpState();
         this.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
-                if (this.isVerticalAttack(enemy)) {
+                if (this.isVerticalAttack(enemy, jumpState)) {
                     this.handleVerticalAttack(enemy, index);
                 } else if (!enemy.isDead() && !this.character.isHit()) {
                     this.handleHorizontalCollision(enemy);
@@ -415,19 +439,32 @@ class World {
     }
 
     /**
+     * Snapshots the character's fall state before any enemy is processed this frame,
+     * so a stomp bounce on one enemy can't change how the next enemy is classified.
+     * @returns {{speedY: number, aboveGround: boolean}} Jump state at the start of the frame.
+     */
+    captureJumpState() {
+        return {
+            speedY: this.character.speedY,
+            aboveGround: this.character.isAboveGround(),
+        };
+    }
+
+    /**
      * Checks whether the character is jumping down onto the given enemy.
      * @param {MovableObject} enemy - Enemy to check against.
+     * @param {{speedY: number, aboveGround: boolean}} jumpState - Character's fall state at frame start.
      * @returns {boolean} True if this counts as a stomp/jump attack.
      */
-    isVerticalAttack(enemy) {
+    isVerticalAttack(enemy, jumpState) {
         const characterCenterY = this.character.y + this.character.height / 2;
         const enemyCenterY = enemy.y + enemy.height / 2;
         const verticalDistance = enemyCenterY - characterCenterY;
         const threshold = 20;
 
         return verticalDistance > threshold &&
-            this.character.speedY < 0 &&
-            this.character.isAboveGround();
+            jumpState.speedY < 0 &&
+            jumpState.aboveGround;
     }
 
     /**

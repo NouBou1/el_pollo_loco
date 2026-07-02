@@ -5,6 +5,7 @@ let gameStarted = false;
 let gameOverImage;
 let winImage;
 let soundManager = new SoundManager();
+let gameStateIntervalId;
 
 /**
  * Initializes the canvas, preloads images, shows the start screen,
@@ -30,13 +31,15 @@ function showPlayButton(symbol) {
     button.textContent = symbol;
     button.setAttribute('aria-label', symbol === '▶' ? 'Spiel starten' : 'Spiel neu starten');
     button.classList.remove('hidden');
+    document.getElementById('home-btn').classList.remove('hidden');
 }
 
 /**
- * Hides the play button.
+ * Hides the play button and the home button alongside it.
  */
 function hidePlayButton() {
     document.getElementById('play-btn').classList.add('hidden');
+    document.getElementById('home-btn').classList.add('hidden');
 }
 
 const PLAY_BUTTON_END_DELAY_MS = 2000;
@@ -124,9 +127,9 @@ function attachPointerEvents(button, press, release) {
  */
 function loadImages() {
     gameOverImage = new Image();
-    gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.png';
+    gameOverImage.src = 'assets/img/9_intro_outro_screens/game_over/game_over_a.webp';
     winImage = new Image();
-    winImage.src = 'assets/img/intro_outro/you_win_b.png';
+    winImage.src = 'assets/img/intro_outro/you_win_b.webp';
 }
 
 /**
@@ -135,7 +138,7 @@ function loadImages() {
 function showStartScreen() {
     let ctx = canvas.getContext('2d');
     let startImage = new Image();
-    startImage.src = 'assets/img/9_intro_outro_screens/start/startscreen_1.png';
+    startImage.src = 'assets/img/9_intro_outro_screens/start/startscreen_1.webp';
     startImage.onload = () => {
         ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
     };
@@ -156,7 +159,8 @@ function startGame() {
  * Polls the world for game-over or victory conditions.
  */
 function checkGameState() {
-    setInterval(() => {
+    clearInterval(gameStateIntervalId);
+    gameStateIntervalId = setInterval(() => {
         if (!world || !gameStarted) return;
 
         if (world.character.isDead() && world.character.deathAnimationComplete) {
@@ -216,9 +220,17 @@ function showWin() {
 }
 
 /**
- * Reloads the page to restart the game from scratch.
+ * Restarts the game in place: stops the previous run's loops and starts a fresh one.
  */
 function restartGame() {
+    world.stop();
+    startGame();
+}
+
+/**
+ * Leaves the current run and returns to the home/start screen via a full page reload.
+ */
+function goToHomeScreen() {
     location.reload();
 }
 
