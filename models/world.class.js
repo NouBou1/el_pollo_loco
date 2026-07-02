@@ -6,19 +6,20 @@ class World {
 
     character = new Character();
     canvas;
-    enemies = level1.enemies;
-    clouds = level1.clouds;
-    backgroundObjects = level1.backgroundObjects;
-    bottles = level1.bottles;
-    coins = level1.coins;
+    level = createLevel1();
+    enemies = this.level.enemies;
+    clouds = this.level.clouds;
+    backgroundObjects = this.level.backgroundObjects;
+    bottles = this.level.bottles;
+    coins = this.level.coins;
     statusbar = [new Statusbar()];
     throwableObjects = [];
     ctx;
     keyboard;
     world;
     camera_x = 0;
-    level = level1;
     hit = false;
+    runIntervalId;
     bottleStatusbar = new BottleStatusbar(this.bottles.length);
     coinStatusbar = new CoinStatusbar(this.coins.length);
     endbossStatusbar = new EndbossStatusbar();
@@ -129,7 +130,7 @@ class World {
      * Starts the recurring game loop: collisions, cleanup and enemy spawning.
      */
     run() {
-        setInterval(() => {
+        this.runIntervalId = setInterval(() => {
             this.checkJumpOnEnemy();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
@@ -137,6 +138,18 @@ class World {
             this.removeCompletedSplashes();
             this.spawnEnemies();
         }, 1000 / 60);
+    }
+
+    /**
+     * Stops the game loop and every interval/timeout owned by the character,
+     * enemies and in-flight bottles, so a restart doesn't leave this run's
+     * background loops ticking alongside the next one.
+     */
+    stop() {
+        clearInterval(this.runIntervalId);
+        this.character.stopIntervals();
+        this.enemies.forEach(enemy => enemy.stopIntervals());
+        this.throwableObjects.forEach(bottle => bottle.stopIntervals());
     }
 
     /**
@@ -271,6 +284,7 @@ class World {
      * @param {number} enemyIndex - Index of the enemy to remove.
      */
     removeEnemy(enemyIndex) {
+        this.enemies[enemyIndex].stopIntervals();
         this.enemies.splice(enemyIndex, 1);
     }
 

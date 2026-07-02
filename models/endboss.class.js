@@ -99,7 +99,7 @@ class Endboss extends MovableObject {
      * Starts the recurring loop that updates the boss's animation state.
      */
     startAnimationLoop() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.updateAnimationState();
         }, 1000 / 10);
     }
@@ -108,7 +108,7 @@ class Endboss extends MovableObject {
      * Starts the recurring loop that moves the boss towards its target position.
      */
     startMovementLoop() {
-        setInterval(() => {
+        this.startInterval(() => {
             this.moveTowardsTarget();
         }, 1000 / 60);
     }

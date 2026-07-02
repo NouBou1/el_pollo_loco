@@ -38,7 +38,7 @@ h1 {
     font-family: 'Danfo', serif;
     color: #f5cd05;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-    margin: 0 0 10px 0;
+    margin: 0 0 0px 0;
     font-size: 64px;
     letter-spacing: 2px;
 }
@@ -173,6 +173,11 @@ canvas {
     display: none;
 }
 
+.home-btn {
+    left: auto;
+    right: 24px;
+}
+
 
 
 .action-buttons {
@@ -183,7 +188,7 @@ canvas {
 
 #toggle-legend-btn,
 #mute-btn {
-    padding: 12px 24px;
+    padding: 8px 16px;
     background: linear-gradient(to bottom, #ff6b35, #d95426);
     color: white;
     border: 3px solid #8B4513;
@@ -201,7 +206,7 @@ canvas {
 
 #mute-btn {
     font-family: 'Danfo', serif;
-    padding: 12px 20px;
+    padding: 8px 14px;
     line-height: 1;
 }
 

@@ -52,7 +52,7 @@ class SmallChicken extends MovableObject {
      */
     animate() {
         this.moveLeft();
-        setInterval(() => {
+        this.startInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else {
@@ -76,7 +76,7 @@ class SmallChicken extends MovableObject {
      * Starts a recurring gravity simulation applied while the chicken is jumping.
      */
     applyChickenGravity() {
-        setInterval(() => {
+        this.startInterval(() => {
             if (this.isJumping) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
@@ -94,7 +94,7 @@ class SmallChicken extends MovableObject {
      */
     scheduleNextJump() {
         const delay = 2000 + Math.random() * 3000;
-        setTimeout(() => {
+        this.startTimeout(() => {
             this.jump();
             this.scheduleNextJump();
         }, delay);

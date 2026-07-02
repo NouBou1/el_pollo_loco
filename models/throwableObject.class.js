@@ -61,11 +61,9 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 20;
         const direction = this.otherDirection ? -1 : 1;
-        this.throwInterval = setInterval(() => {
+        this.throwInterval = this.startInterval(() => {
             this.x += 10 * direction;
         }, 25);
-
-
     }
 
     /**
@@ -83,7 +81,7 @@ class ThrowableObject extends MovableObject {
      * Starts the rotation or splash animation loop depending on hit state.
      */
     animate() {
-        setInterval(() => {
+        this.startInterval(() => {
             if (this.hasHit) {
                 this.playSplashAnimation();
             } else {
