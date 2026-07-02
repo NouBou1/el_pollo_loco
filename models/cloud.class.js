@@ -12,7 +12,7 @@ class Cloud extends MovableObject {
      * Creates a cloud at a random horizontal position and starts its movement.
      */
     constructor() {
-        super().loadImage('assets/img/5_background/layers/4_clouds/1.png');
+        super().loadImage('assets/img/5_background/layers/4_clouds/1.webp');
         this.x = Math.random() * 700;
         this.animate();
 

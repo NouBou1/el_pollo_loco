@@ -19,12 +19,12 @@ class SmallChicken extends MovableObject {
     acceleration = 2;
     isJumping = false;
     IMAGES_WALKING = [
-        'assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
-        'assets/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
-        'assets/img/3_enemies_chicken/chicken_small/1_walk/3_w.png',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.webp',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/2_w.webp',
+        'assets/img/3_enemies_chicken/chicken_small/1_walk/3_w.webp',
     ];
     IMAGES_DEAD = [
-        'assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png'
+        'assets/img/3_enemies_chicken/chicken_small/2_dead/dead.webp'
     ];
     currentImageIndex = 0;
 
@@ -36,7 +36,7 @@ class SmallChicken extends MovableObject {
      * @param {number} [x] - Horizontal position; random position if omitted.
      */
     constructor(x = 800 + Math.random() * 3000) {
-        super().loadImage('assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
+        super().loadImage('assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.webp');
 
         this.x = x;
         this.speed = 0.6 + Math.random() * 1.2;

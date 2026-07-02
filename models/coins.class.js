@@ -14,7 +14,7 @@ class Coin extends DrawableObject {
      * @param {number} [x] - Horizontal position; random position if omitted.
      */
     constructor(x) {
-        super().loadImage('assets/img/8_coin/coin_1.png');
+        super().loadImage('assets/img/8_coin/coin_1.webp');
         this.x = x || 200 + Math.random() * 3000;
     }
 

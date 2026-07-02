@@ -51,17 +51,30 @@ h1 {
 }
 
 .site-footer {
-    margin-top: 12px;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 20;
 }
 
 .site-footer a {
+    display: inline-block;
     color: #f5cd05;
     font-size: 14px;
     font-weight: bold;
     text-decoration: none;
     background: rgba(0, 0, 0, 0.5);
     padding: 4px 12px;
+    border: 2px solid #8B4513;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+}
+
+.site-footer a:hover {
+    background: rgba(0, 0, 0, 0.75);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .legal-page {
