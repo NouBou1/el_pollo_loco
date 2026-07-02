@@ -300,8 +300,9 @@ class World {
             return;
         }
         this.clearCanvas();
-        this.drawMovingObjects();
+        this.drawBackgroundObjects();
         this.drawFixedObjects();
+        this.drawForegroundObjects();
         this.scheduleNextFrame();
     }
 
@@ -328,14 +329,22 @@ class World {
     }
 
     /**
-     * Draws all camera-relative (world-space) objects: background, level objects, character, enemies and bottles.
+     * Draws camera-relative background layers that must stay behind the HUD: backdrop, clouds and pickups.
      */
-    drawMovingObjects() {
+    drawBackgroundObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.backgroundObjects);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.coins);
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    /**
+     * Draws camera-relative foreground actors on top of the HUD: character, enemies and thrown bottles.
+     */
+    drawForegroundObjects() {
+        this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap([this.character]);
         this.addObjectsToMap(this.enemies);
         this.addObjectsToMap(this.throwableObjects);
@@ -403,9 +412,10 @@ class World {
      * or horizontal (contact damage) handler.
      */
     checkJumpOnEnemy() {
+        const jumpState = this.captureJumpState();
         this.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
-                if (this.isVerticalAttack(enemy)) {
+                if (this.isVerticalAttack(enemy, jumpState)) {
                     this.handleVerticalAttack(enemy, index);
                 } else if (!enemy.isDead() && !this.character.isHit()) {
                     this.handleHorizontalCollision(enemy);
@@ -415,19 +425,32 @@ class World {
     }
 
     /**
+     * Snapshots the character's fall state before any enemy is processed this frame,
+     * so a stomp bounce on one enemy can't change how the next enemy is classified.
+     * @returns {{speedY: number, aboveGround: boolean}} Jump state at the start of the frame.
+     */
+    captureJumpState() {
+        return {
+            speedY: this.character.speedY,
+            aboveGround: this.character.isAboveGround(),
+        };
+    }
+
+    /**
      * Checks whether the character is jumping down onto the given enemy.
      * @param {MovableObject} enemy - Enemy to check against.
+     * @param {{speedY: number, aboveGround: boolean}} jumpState - Character's fall state at frame start.
      * @returns {boolean} True if this counts as a stomp/jump attack.
      */
-    isVerticalAttack(enemy) {
+    isVerticalAttack(enemy, jumpState) {
         const characterCenterY = this.character.y + this.character.height / 2;
         const enemyCenterY = enemy.y + enemy.height / 2;
         const verticalDistance = enemyCenterY - characterCenterY;
         const threshold = 20;
 
         return verticalDistance > threshold &&
-            this.character.speedY < 0 &&
-            this.character.isAboveGround();
+            jumpState.speedY < 0 &&
+            jumpState.aboveGround;
     }
 
     /**

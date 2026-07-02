@@ -51,9 +51,9 @@ class BottleStatusbar extends DrawableObject {
             return 4;
         } else if (percentage >= 55) {
             return 3;
-        } else if (percentage >= 35) {
+        } else if (percentage >= 25) {
             return 2;
-        } else if (percentage >= 15) {
+        } else if (percentage >= 0) {
             return 1;
         } else {
             return 0;
