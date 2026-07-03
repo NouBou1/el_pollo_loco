@@ -182,6 +182,7 @@ canvas {
     display: flex;
     gap: 12px;
     margin-top: 20px;
+    margin-bottom: 16px;
 }
 
 #toggle-legend-btn,
@@ -482,6 +483,38 @@ fieldset.mobile-controls-group {
         font-size: 16px;
         padding: 4px 12px;
         min-width: 50px;
+    }
+}
+
+@media (max-height: 650px) {
+    .legend {
+        padding: 16px 30px;
+        max-height: 92dvh;
+    }
+
+    .legend h2 {
+        font-size: 22px;
+        margin: 0 0 12px 0;
+        padding-bottom: 8px;
+    }
+
+    .legend h3 {
+        font-size: 18px;
+        margin: 0 0 10px 0;
+    }
+
+    .controls-list {
+        gap: 10px 16px;
+    }
+
+    .controls-list dd {
+        font-size: 18px;
+    }
+
+    kbd {
+        font-size: 18px;
+        padding: 4px 14px;
+        min-width: 55px;
     }
 }
 
