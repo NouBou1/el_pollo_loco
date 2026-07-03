@@ -45,18 +45,12 @@ class BottleStatusbar extends DrawableObject {
      * @returns {number} Image index from 0 (empty) to 5 (full).
      */
     getImageIndex(percentage) {
-        if (percentage >= 95) {
-            return 5;
-        } else if (percentage >= 75) {
-            return 4;
-        } else if (percentage >= 55) {
-            return 3;
-        } else if (percentage >= 25) {
-            return 2;
-        } else if (percentage >= 0) {
-            return 1;
-        } else {
+        if (percentage <= 0) {
             return 0;
         }
+        if (percentage >= 100) {
+            return 5;
+        }
+        return Math.min(4, Math.ceil(percentage / 20));
     }
 }

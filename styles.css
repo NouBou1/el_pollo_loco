@@ -59,22 +59,27 @@ h1 {
 
 .site-footer a {
     display: inline-block;
-    color: #f5cd05;
-    font-size: 14px;
-    font-weight: bold;
+    font-family: 'Danfo', serif;
+    color: white;
+    font-size: 16px;
     text-decoration: none;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 4px 12px;
-    border: 2px solid #8B4513;
-    border-radius: 8px;
+    background: linear-gradient(to bottom, #ff6b35, #d95426);
+    padding: 6px 16px;
+    border: 3px solid #8B4513;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     transition: all 0.3s;
 }
 
 .site-footer a:hover {
-    background: rgba(0, 0, 0, 0.75);
+    background: linear-gradient(to bottom, #ff8555, #ff6b35);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.site-footer a:active {
+    transform: translateY(0);
 }
 
 .legal-page {
@@ -115,7 +120,7 @@ h1 {
 
 .legal-content .legal-source {
     margin-top: 24px;
-    font-size: 13px;
+    font-size: 16px;
     opacity: 0.8;
 }
 
@@ -173,17 +178,11 @@ canvas {
     display: none;
 }
 
-.home-btn {
-    left: auto;
-    right: 24px;
-}
-
-
-
 .action-buttons {
     display: flex;
     gap: 12px;
     margin-top: 20px;
+    margin-bottom: 16px;
 }
 
 #toggle-legend-btn,
@@ -444,6 +443,11 @@ fieldset.mobile-controls-group {
         padding: 8px 16px;
     }
 
+    .site-footer a {
+        font-size: 16px;
+        padding: 5px 14px;
+    }
+
     .play-btn {
         width: 48px;
         height: 48px;
@@ -479,6 +483,38 @@ fieldset.mobile-controls-group {
         font-size: 16px;
         padding: 4px 12px;
         min-width: 50px;
+    }
+}
+
+@media (max-height: 650px) {
+    .legend {
+        padding: 16px 30px;
+        max-height: 92dvh;
+    }
+
+    .legend h2 {
+        font-size: 22px;
+        margin: 0 0 12px 0;
+        padding-bottom: 8px;
+    }
+
+    .legend h3 {
+        font-size: 18px;
+        margin: 0 0 10px 0;
+    }
+
+    .controls-list {
+        gap: 10px 16px;
+    }
+
+    .controls-list dd {
+        font-size: 18px;
+    }
+
+    kbd {
+        font-size: 18px;
+        padding: 4px 14px;
+        min-width: 55px;
     }
 }
 

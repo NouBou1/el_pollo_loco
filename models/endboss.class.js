@@ -26,8 +26,8 @@ class Endboss extends MovableObject {
     attackImageIndex = 0;
     lastAttack = 0;
     attackCooldown = 1800;
-    attackRange = 50;
-    attackLungeDistance = 200;
+    attackRange = 110;
+    attackLungeDistance = 400;
     attackStartX = 0;
     attackStartTime = 0;
     attackFrameDuration = 300;
@@ -269,12 +269,12 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Checks whether the character is within attack range and still alive.
+     * Checks whether the character is actually touching the boss and still alive.
      * @param {Character} character - The character to check.
      * @returns {boolean} True if the character can be hit.
      */
     canHitCharacter(character) {
-        return this.getGapToCharacter() < this.attackRange && !character.isDead();
+        return this.isColliding(character) && !character.isDead();
     }
 
     /**

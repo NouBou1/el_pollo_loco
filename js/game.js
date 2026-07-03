@@ -31,15 +31,13 @@ function showPlayButton(symbol) {
     button.textContent = symbol;
     button.setAttribute('aria-label', symbol === '▶' ? 'Spiel starten' : 'Spiel neu starten');
     button.classList.remove('hidden');
-    document.getElementById('home-btn').classList.remove('hidden');
 }
 
 /**
- * Hides the play button and the home button alongside it.
+ * Hides the play button.
  */
 function hidePlayButton() {
     document.getElementById('play-btn').classList.add('hidden');
-    document.getElementById('home-btn').classList.add('hidden');
 }
 
 const PLAY_BUTTON_END_DELAY_MS = 2000;
@@ -225,13 +223,6 @@ function showWin() {
 function restartGame() {
     world.stop();
     startGame();
-}
-
-/**
- * Leaves the current run and returns to the home/start screen via a full page reload.
- */
-function goToHomeScreen() {
-    location.reload();
 }
 
 /**
