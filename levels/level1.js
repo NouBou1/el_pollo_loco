@@ -13,7 +13,6 @@ function createLevel1() {
             new Cloud(),
             new Cloud(),
             new Cloud(),
-
         ],
         [
             new BackgroundObject('assets/img/5_background/layers/air.webp', 0, 0),
